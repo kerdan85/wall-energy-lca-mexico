@@ -10,6 +10,7 @@ authors:
   - family-names: "Gori"
     given-names: "Virginia"
 version: "1.0.0"
+doi: "10.5281/zenodo.24452515"
 date-released: "2026-11-23"
 license: MIT
 repository-code: "https://github.com/kerdan85/wall-energy-lca-mexico"
