@@ -18,7 +18,7 @@ BASEMAT=dict(E.MAT)
 # ---------------- base parameters ----------------
 Af=73.45; Aw=176.53-4.68-1.87; T=50   # opaque wall area (gross minus glazing and door of the EnergyPlus model)
 COP_H=1.0; COP_C=3.0
-F_GRID=0.42; CE=3.5; R=0.05; E_T=0.10; C_T=1.0; FX=19.0
+F_GRID=0.444; CE=3.5; R=0.05; E_T=0.10; C_T=1.0; FX=19.0
 PRICE={"Concrete (ref.)":(13,12.5,240),"Adobe-type block":(10,12.5,240),"Volcanic stone (recinto)":(14,12.5,240),
        "Tepetate ashlar":(12,10.0,240),"SBC block (solid)":(20,12.5,240),"SBC block (hollow)":(24,12.5,240)}
 A1A3={"Concrete (ref.)":41.0,"Adobe-type block":31.6,"Volcanic stone (recinto)":3.8,
@@ -200,7 +200,7 @@ for c in CLIM:
             L.append(("Production carbon P5–P95",evaluate(c,m,a13=q(m,0.95))["dCO2"]-b,evaluate(c,m,a13=q(m,0.05))["dCO2"]-b))
             L.append(("Reference production P5–P95",evaluate(c,m,a13ref=q(REF,0.05))["dCO2"]-b,evaluate(c,m,a13ref=q(REF,0.95))["dCO2"]-b))
         L.append(("Freight factor 0.06–0.15",evaluate(c,m,e_t=0.15)["dCO2"]-b,evaluate(c,m,e_t=0.06)["dCO2"]-b))
-        L.append(("Grid factor 0.25–0.42",evaluate(c,m,f=0.25)["dCO2"]-b,0.0))
+        L.append(("Grid factor 0.25–0.444",evaluate(c,m,f=0.25)["dCO2"]-b,0.0))
         L.append(("Cooling COP 2.5–4",evaluate(c,m,cop_c=4.0)["dCO2"]-b,evaluate(c,m,cop_c=2.5)["dCO2"]-b))
         OAT[c][m]=L
 
@@ -217,7 +217,7 @@ for m in MATS:
     g[m]=np.exp(np.log(A1A3[m])-s*s/2+s*z)
 for dct in (uU,uK,g): dct[CC]=dct[SOLID]
 eT=rng.triangular(0.06,0.10,0.15,N); cT=rng.triangular(0.7,1.0,1.5,N); cop=rng.triangular(2.5,3.0,4.0,N)
-fg=rng.uniform(0.25,0.42,N); ce=rng.triangular(1.2,3.5,4.5,N); rr=rng.uniform(0.03,0.08,N)
+fg=rng.uniform(0.25,0.444,N); ce=rng.triangular(1.2,3.5,4.5,N); rr=rng.uniform(0.03,0.08,N)
 pf={m:rng.normal(1,0.10,N) for m in MATS}; pf[CC]=pf[SOLID]; pf[INS]=pf[REF]
 PV=(1-(1+rr)**(-T))/rr
 if INS in ALT:   # drawn last so that the samples of the other walls are unchanged

@@ -106,13 +106,14 @@ def build(params):
         ("PLASTERBOARD", 0.013, 0.25, 900, 1000, 0.6), ("FLOOR_INSUL", 0.1327, 0.04, 15, 1400, 0.6),
         ("CAST_CONCRETE", 0.100, 1.13, 2000, 1000, 0.6), ("SCREED", 0.070, 0.41, 1200, 840, 0.6),
         ("TIMBER_FLOOR", 0.030, 0.14, 650, 1200, 0.6), ("INT_FLOOR_CONC", 0.100, 1.40, 2100, 840, 0.6),
-        ("GYPSUM", 0.025, 0.25, 900, 1000, 0.5), ("DOOR_WOOD", 0.035, 0.19, 700, 2390, 0.6)]
+        ("GYPSUM", 0.025, 0.25, 900, 1000, 0.5), ("DOOR_WOOD", 0.035, 0.19, 700, 2390, 0.6),
+        ("ROOF_WP", 0.004, 0.50, 1100, 1000, 0.70)]   # elastomeric waterproofing on an uninsulated 100 mm slab
     for n, t, k, r, c, a in mats:
         o.append(fmt("Material", [n, "MediumRough", t, k, r, c, 0.9, a, a]))
     o.append(fmt("Material:AirGap", ["AIRGAP", 0.15]))
     o.append(fmt("WindowMaterial:Glazing", ["CLEAR_6MM", "SpectralAverage", "", 0.006, 0.775, 0.071, 0.071,
                                             0.881, 0.080, 0.080, 0, 0.84, 0.84, 0.9]))
-    cons = [("EXT_WALL", wall_layers), ("FLAT_ROOF", ["ASPHALT", "ROOF_INSUL", "PLASTERBOARD"]),
+    cons = [("EXT_WALL", wall_layers), ("FLAT_ROOF", ["ROOF_WP", "CAST_CONCRETE"] if p.get("roof_slab") else ["ASPHALT", "ROOF_INSUL", "PLASTERBOARD"]),
             ("GROUND_FLOOR", ["FLOOR_INSUL", "CAST_CONCRETE", "SCREED", "TIMBER_FLOOR"]),
             ("EXT_FLOOR", ["FLOOR_INSUL", "CAST_CONCRETE", "SCREED", "TIMBER_FLOOR"]),
             ("INT_FLOOR", ["INT_FLOOR_CONC"]), ("INT_CEILING", ["INT_FLOOR_CONC"]),
@@ -158,6 +159,10 @@ def build(params):
 
     # ---------------- zones and surfaces ----------------
     surfaces, subs = [], []
+    # side (east and west) walls: exposed (end-of-terrace, default) or party walls of a mid-terrace unit
+    _PARTY, _EXP = ("Adiabatic", "", "NoSun", "NoWind"), ("Outdoors", "", "SunExposed", "WindExposed")
+    SIDE_E = _PARTY if (p.get("party_walls") or p.get("party_east")) else _EXP
+    SIDE_W = _PARTY if (p.get("party_walls") or p.get("party_west")) else _EXP
 
     def add_zone(zn):
         a, v = ZONE_AV[zn]
@@ -179,10 +184,8 @@ def build(params):
             add_zone(zn)
             y0, y1 = y, y + d
             bounds.append((zn, y0, y1))
-            surf(f"{zn}_E", "Wall", "EXT_WALL", zn, "Outdoors", "", "SunExposed", "WindExposed",
-                 wall_pts((W, y0), (W, y1), z0, z0 + H))
-            surf(f"{zn}_W", "Wall", "EXT_WALL", zn, "Outdoors", "", "SunExposed", "WindExposed",
-                 wall_pts((0, y1), (0, y0), z0, z0 + H))
+            surf(f"{zn}_E", "Wall", "EXT_WALL", zn, *SIDE_E, wall_pts((W, y0), (W, y1), z0, z0 + H))
+            surf(f"{zn}_W", "Wall", "EXT_WALL", zn, *SIDE_W, wall_pts((0, y1), (0, y0), z0, z0 + H))
             y = y1
         return bounds
 
@@ -224,8 +227,7 @@ def build(params):
     x0, x1, yb = BAY_X0, W, -BAY_D
     surf("BAY_S", "Wall", "EXT_WALL", "BAY", "Outdoors", "", "SunExposed", "WindExposed",
          wall_pts((x0, yb), (x1, yb), H, 2 * H))
-    surf("BAY_E", "Wall", "EXT_WALL", "BAY", "Outdoors", "", "SunExposed", "WindExposed",
-         wall_pts((x1, yb), (x1, 0), H, 2 * H))
+    surf("BAY_E", "Wall", "EXT_WALL", "BAY", *SIDE_E, wall_pts((x1, yb), (x1, 0), H, 2 * H))
     surf("BAY_W", "Wall", "EXT_WALL", "BAY", "Outdoors", "", "SunExposed", "WindExposed",
          wall_pts((x0, 0), (x0, yb), H, 2 * H))
     surf("BAY_FLOOR", "Floor", "EXT_FLOOR", "BAY", "Outdoors", "", "NoSun", "WindExposed",

@@ -1,5 +1,7 @@
 # Wall materials for urban housing: energy simulation + LCA framework
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24453797.svg)](https://doi.org/10.5281/zenodo.24453797)
+
 Code and data for the article:
 
 > García Kerdán I., Pérez Pastrana L.E., Gori V. *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: from measured U-values to whole-life carbon and cost.* Energy (under review).
@@ -53,6 +55,7 @@ wall-energy-lca-mexico/
 │   ├── run_ep_all.py         all runs of the paper → energyplus_results.csv, energyplus_perturbations.csv
 │   ├── calib.py              replays the 13 DesignBuilder runs, prints NMBE and CV(RMSE)
 │   ├── run_extensions.py     insulated benchmark, free-running comfort, 2050 climate (morphs the weather files)
+│   ├── run_variants.py       end- and mid-terrace units, uninsulated roof, reflective coating on concrete
 │   ├── colour_check.py       optional: removes the effect of wall colour (absorptance 0.65 for all)
 │   ├── db_runs.json          summary results of the original DesignBuilder runs
 │   ├── example/              one ready-made IDF (open it in EnergyPlus / IDF Editor)
@@ -61,6 +64,7 @@ wall-energy-lca-mexico/
 ├── pipeline/                 LEVEL 1
 │   ├── run_all.py            ← run this: reproduces everything
 │   ├── mk_robust.py          offsets, costs, Monte Carlo, scenarios, sensitivity
+│   ├── mk_variants.py        dwelling variants, rendered walls, 10% U uncertainty, LPG heating (Tables S12–S17)
 │   ├── lca_inputs.py         reads the tables in inputs/
 │   ├── mk_*.py               one script per figure group
 │   ├── sim_engine.py         simplified 5R1C model (fallback only)
@@ -178,6 +182,13 @@ python run_extensions.py
 ```
 This writes the morphed 2041–2060 weather files to `weather/2050/` (dry-bulb shifted by +1.52 K in Mexico City and Hermosillo, +1.36 K in Mérida, relative humidity kept), and runs the insulated benchmark (7 cases × 3 cities), every wall free-running in both climates (scored against the EN 16798-1 Category II adaptive band from EnergyPlus's SQLite output), and every wall conditioned in the 2050 climate. It writes `energyplus_insulated.csv`, `energyplus_comfort.csv` and `energyplus_2050.csv`, again copied to `pipeline/inputs/`.
 
+For the dwelling and finish variants of the revised paper (Tables S14–S18):
+
+```bash
+python run_variants.py
+```
+This runs 108 cases (detached unit with a bare roof slab, end-of-terrace units with the east or the west wall shared, mid-terrace units with and without it, and the concrete wall with a reflective coating) and writes `energyplus_variants.csv`, copied to `pipeline/inputs/` (with `colour_check.py` writing `energyplus_colour_check.csv` for the rendered-wall case). Then run `pipeline/mk_variants.py` (in Spyder: open it and press F5), which writes `variants_results.json`. It also computes the Mexico City offsets with LPG instead of electric heating (IPCC default emission factor, appliance efficiency 0.75–0.95; Table S17).
+
 Then go back to Level 1 (`python ../pipeline/run_all.py`) to propagate the results.
 
 On Windows, run the script from a terminal rather than from the Spyder console, because Python's multiprocessing does not work reliably inside Spyder on Windows.
@@ -293,6 +304,6 @@ The wall names (e.g. `"SBC block (solid)"`) are used as keys across the scripts.
 
 **Funding:** Secretaría de Educación, Ciencia, Tecnología e Innovación de la Ciudad de México (SECTEI), agreement SECTEI/105/2025.
 
-**How to cite:** please cite the article and this repository (DOI on the Zenodo badge / `CITATION.cff`).
+**How to cite:** please cite the article and this repository: García Kerdán I., Pérez Pastrana L.E., Gori V. (2026). *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: code and data*. Zenodo. https://doi.org/10.5281/zenodo.24453797
 
 **Contact:** Iván García Kerdán, Tecnologico de Monterrey, School of Engineering and Sciences, Mexico City, Mexico.

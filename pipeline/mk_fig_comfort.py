@@ -44,9 +44,9 @@ for k, c in enumerate(CLIM):
     ax.set_title(S.CLIMLAB[c].split(" (")[0], fontsize=8.8, pad=6)
     S.panel(ax, "abc"[k], x=-0.04 if k else -0.42, y=1.03)
     ax.text(0.98, 1.0, "total", transform=ax.transAxes, ha="right", va="bottom", fontsize=6.2, color=MUT)
-fig.supxlabel("Degree-hours outside the adaptive comfort band, occupied hours (10$^3$ K h yr$^{-1}$)   $\\leftarrow$ too cold  |  too warm $\\rightarrow$", fontsize=7.8, y=0.075)
+fig.text(0.57, 0.12, "Degree-hours outside the adaptive comfort band, occupied hours (10$^3$ K h yr$^{-1}$)   $\\leftarrow$ too cold  |  too warm $\\rightarrow$", fontsize=7.8, ha="center")
 fig.legend(handles=[Patch(fc=COLD, label="Too cold, present climate"), Patch(fc=WARM, label="Too warm, present climate"),
                     Patch(fc="white", ec=MUT, hatch="////", label="2041–2060 climate (SSP2-4.5)")],
-           loc="lower center", ncol=3, fontsize=7.0, frameon=False, bbox_to_anchor=(0.5, -0.01))
-plt.tight_layout(rect=[0, 0.1, 1, 1], w_pad=0.6)
+           loc="lower center", ncol=3, fontsize=7.0, frameon=False, bbox_to_anchor=(0.57, 0.0))
+fig.subplots_adjust(left=0.15, right=0.99, top=0.88, bottom=0.25, wspace=0.12)   # explicit layout (tight_layout is unreliable here across matplotlib versions)
 plt.savefig(f"{OUT}/nat_comfort.png"); shutil.copy(f"{OUT}/nat_comfort.png", f"{DST}/nat_comfort.png"); print("comfort saved")

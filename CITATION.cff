@@ -9,7 +9,8 @@ authors:
     given-names: "Lydia E."
   - family-names: "Gori"
     given-names: "Virginia"
-version: "1.0.0"
+version: "1.2.0"
+doi: "10.5281/zenodo.24453797"
 date-released: "2026-11-23"
 license: MIT
 repository-code: "https://github.com/kerdan85/wall-energy-lca-mexico"

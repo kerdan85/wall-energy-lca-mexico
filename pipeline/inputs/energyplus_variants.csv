@@ -1,0 +1,109 @@
+city,variant,material,heating_kwh_m2,cooling_kwh_m2
+Mexico City,det_slab,Concrete (ref.),31.403,14.404
+Mexico City,det_slab,Adobe-type block,29.408,5.433
+Mexico City,det_slab,Volcanic stone (recinto),27.065,35.696
+Mexico City,det_slab,Tepetate ashlar,23.702,1.734
+Mexico City,det_slab,SBC block (solid),27.998,8.538
+Mexico City,det_slab,SBC block (hollow),33.418,11.111
+Mexico City,det_slab,Concrete + EPS (insulated),14.237,5.197
+Mexico City,end,Concrete (ref.),13.378,2.644
+Mexico City,end,Adobe-type block,13.655,0.484
+Mexico City,end,Volcanic stone (recinto),11.074,9.069
+Mexico City,end,Tepetate ashlar,10.52,0.147
+Mexico City,end,SBC block (solid),11.879,1.164
+Mexico City,end,SBC block (hollow),14.89,1.755
+Mexico City,end,Concrete + EPS (insulated),3.81,1.254
+Mexico City,end_w,Concrete (ref.),8.645,5.342
+Mexico City,end_w,Adobe-type block,9.352,1.697
+Mexico City,end_w,Volcanic stone (recinto),6.428,16.674
+Mexico City,end_w,Tepetate ashlar,7.657,0.422
+Mexico City,end_w,SBC block (solid),7.955,3.01
+Mexico City,end_w,SBC block (hollow),9.855,3.799
+Mexico City,end_w,Concrete + EPS (insulated),2.419,2.364
+Mexico City,mid,Concrete (ref.),5.047,4.554
+Mexico City,mid,Adobe-type block,4.959,2.661
+Mexico City,mid,Volcanic stone (recinto),5.142,7.79
+Mexico City,mid,Tepetate ashlar,3.381,1.869
+Mexico City,mid,SBC block (solid),4.359,3.506
+Mexico City,mid,SBC block (hollow),5.422,3.848
+Mexico City,mid,Concrete + EPS (insulated),1.257,3.515
+Mexico City,mid_slab,Concrete (ref.),13.213,6.566
+Mexico City,mid_slab,Adobe-type block,12.4,4.083
+Mexico City,mid_slab,Volcanic stone (recinto),12.725,9.316
+Mexico City,mid_slab,Tepetate ashlar,10.555,3.274
+Mexico City,mid_slab,SBC block (solid),12.254,5.269
+Mexico City,mid_slab,SBC block (hollow),13.488,5.748
+Mexico City,mid_slab,Concrete + EPS (insulated),8.448,4.98
+Mexico City,cool_paint,Concrete (ref.),49.581,0.008
+Merida,det_slab,Concrete (ref.),0.012,277.095
+Merida,det_slab,Adobe-type block,0.002,246.597
+Merida,det_slab,Volcanic stone (recinto),0.019,345.064
+Merida,det_slab,Tepetate ashlar,0.0,208.804
+Merida,det_slab,SBC block (solid),0.003,254.294
+Merida,det_slab,SBC block (hollow),0.012,267.656
+Merida,det_slab,Concrete + EPS (insulated),0.0,219.155
+Merida,end,Concrete (ref.),0.0,181.585
+Merida,end,Adobe-type block,0.0,161.414
+Merida,end,Volcanic stone (recinto),0.0,228.437
+Merida,end,Tepetate ashlar,0.0,136.721
+Merida,end,SBC block (solid),0.0,165.967
+Merida,end,SBC block (hollow),0.0,175.329
+Merida,end,Concrete + EPS (insulated),0.0,142.441
+Merida,end_w,Concrete (ref.),0.0,179.784
+Merida,end_w,Adobe-type block,0.0,160.218
+Merida,end_w,Volcanic stone (recinto),0.0,225.412
+Merida,end_w,Tepetate ashlar,0.0,136.299
+Merida,end_w,SBC block (solid),0.0,164.872
+Merida,end_w,SBC block (hollow),0.0,173.499
+Merida,end_w,Concrete + EPS (insulated),0.0,142.213
+Merida,mid,Concrete (ref.),0.0,131.695
+Merida,mid,Adobe-type block,0.0,126.202
+Merida,mid,Volcanic stone (recinto),0.0,142.825
+Merida,mid,Tepetate ashlar,0.0,120.406
+Merida,mid,SBC block (solid),0.0,127.852
+Merida,mid,SBC block (hollow),0.0,129.945
+Merida,mid,Concrete + EPS (insulated),0.0,123.23
+Merida,mid_slab,Concrete (ref.),0.0,196.437
+Merida,mid_slab,Adobe-type block,0.0,190.329
+Merida,mid_slab,Volcanic stone (recinto),0.0,205.907
+Merida,mid_slab,Tepetate ashlar,0.0,184.509
+Merida,mid_slab,SBC block (solid),0.0,192.609
+Merida,mid_slab,SBC block (hollow),0.0,194.637
+Merida,mid_slab,Concrete + EPS (insulated),0.0,188.258
+Merida,cool_paint,Concrete (ref.),0.003,139.648
+Hermosillo,det_slab,Concrete (ref.),12.002,290.429
+Hermosillo,det_slab,Adobe-type block,10.967,254.255
+Hermosillo,det_slab,Volcanic stone (recinto),11.178,380.328
+Hermosillo,det_slab,Tepetate ashlar,8.743,206.629
+Hermosillo,det_slab,SBC block (solid),10.633,260.851
+Hermosillo,det_slab,SBC block (hollow),12.513,279.686
+Hermosillo,det_slab,Concrete + EPS (insulated),5.987,207.634
+Hermosillo,end,Concrete (ref.),4.078,165.677
+Hermosillo,end,Adobe-type block,3.796,143.888
+Hermosillo,end,Volcanic stone (recinto),4.028,222.667
+Hermosillo,end,Tepetate ashlar,2.47,115.102
+Hermosillo,end,SBC block (solid),3.416,147.158
+Hermosillo,end,SBC block (hollow),4.386,159.184
+Hermosillo,end,Concrete + EPS (insulated),0.895,114.539
+Hermosillo,end_w,Concrete (ref.),3.214,176.137
+Hermosillo,end_w,Adobe-type block,3.112,153.379
+Hermosillo,end_w,Volcanic stone (recinto),3.054,237.413
+Hermosillo,end_w,Tepetate ashlar,2.074,121.642
+Hermosillo,end_w,SBC block (solid),2.756,156.857
+Hermosillo,end_w,SBC block (hollow),3.503,169.086
+Hermosillo,end_w,Concrete + EPS (insulated),0.708,120.792
+Hermosillo,mid,Concrete (ref.),1.28,107.946
+Hermosillo,mid,Adobe-type block,1.132,101.023
+Hermosillo,mid,Volcanic stone (recinto),1.458,123.118
+Hermosillo,mid,Tepetate ashlar,0.62,92.796
+Hermosillo,mid,SBC block (solid),1.016,102.646
+Hermosillo,mid,SBC block (hollow),1.352,105.875
+Hermosillo,mid,Concrete + EPS (insulated),0.21,94.438
+Hermosillo,mid_slab,Concrete (ref.),5.478,178.91
+Hermosillo,mid_slab,Adobe-type block,5.065,171.464
+Hermosillo,mid_slab,Volcanic stone (recinto),5.426,191.99
+Hermosillo,mid_slab,Tepetate ashlar,4.306,163.835
+Hermosillo,mid_slab,SBC block (solid),5.08,173.717
+Hermosillo,mid_slab,SBC block (hollow),5.536,176.8
+Hermosillo,mid_slab,Concrete + EPS (insulated),3.732,166.011
+Hermosillo,cool_paint,Concrete (ref.),13.204,133.895

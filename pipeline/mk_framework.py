@@ -102,4 +102,9 @@ for k,(kind,lab) in enumerate([("proc","process / calculation"),("data","data or
     y=ly-0.028*k; node(lx+0.022,y,"",kind,w=0.04,h=0.017 if kind!="dec" else 0.022); bg.text(lx+0.052,y,lab,fontsize=5.8,color=INK,va="center")
 bg.plot([lx-0.004,lx+0.03],[ly-0.028*4,ly-0.028*4],color="#8a8a8a",lw=0.8,ls=(0,(3,2))); bg.text(lx+0.052,ly-0.028*4,"secondary data flow",fontsize=5.8,color=INK,va="center")
 bg.text(c2,R[7]+0.012,"Loop over 6 materials, 3 climates\nand 2 input sets (36 runs)",fontsize=5.8,color=MUT,ha="center",va="center",style="italic")
+# extension runs (revision 2): insulated benchmark, free-running comfort, 2050 weather
+node(c2,R[8],"Extension runs: +25 mm EPS\nbenchmark, free-running,\n2050 morphed weather","proc",h=0.058)
+node(c2,R[9]+0.012,"Overheating degree-hours\nand 2050 demand","out")
+arrow([(c2,R[7]-0.012),(c2,R[8]+0.029)]); arrow([(c2,R[8]-0.029),(c2,R[9]+0.012+h2)])
+arrow([(c2+W_/2,R[8]),(X0[2]-0.012,R[8]),(X0[2]-0.012,R[7]),(c3-W_/2,R[7])],col="#8a8a8a",ls=(0,(3,2)))
 plt.savefig(f"{OUT}/nat_framework.png",dpi=350,facecolor="white"); __import__("shutil").copy(f"{OUT}/nat_framework.png",f"{DST}/nat_framework.png"); print("framework saved")
