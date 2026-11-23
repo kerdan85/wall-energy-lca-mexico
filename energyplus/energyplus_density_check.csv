@@ -1,0 +1,7 @@
+city,case,U,heating_kwh_m2,cooling_kwh_m2
+Mexico City,k0.57_1400,2.628,23.93,8.763
+Mexico City,k0.46_1200,2.321,20.538,7.09
+Merida,k0.57_1400,2.628,0.001,245.199
+Merida,k0.46_1200,2.321,0.0,231.783
+Hermosillo,k0.57_1400,2.628,8.534,258.058
+Hermosillo,k0.46_1200,2.321,7.304,239.176

@@ -189,6 +189,8 @@ python run_variants.py
 ```
 This runs 108 cases (detached unit with a bare roof slab, end-of-terrace units with the east or the west wall shared, mid-terrace units with and without it, and the concrete wall with a reflective coating) and writes `energyplus_variants.csv`, copied to `pipeline/inputs/` (with `colour_check.py` writing `energyplus_colour_check.csv` for the rendered-wall case). Then run `pipeline/mk_variants.py` (in Spyder: open it and press F5), which writes `variants_results.json`. It also computes the Mexico City offsets with LPG instead of electric heating (IPCC default emission factor, appliance efficiency 0.75–0.95; Table S17).
 
+`density_check.py` reruns the reference block with density-matched tabulated conductivities (0.57 and 0.46 W m⁻¹ K⁻¹; Table S18) and writes `energyplus_density_check.csv`.
+
 Then go back to Level 1 (`python ../pipeline/run_all.py`) to propagate the results.
 
 On Windows, run the script from a terminal rather than from the Spyder console, because Python's multiprocessing does not work reliably inside Spyder on Windows.
