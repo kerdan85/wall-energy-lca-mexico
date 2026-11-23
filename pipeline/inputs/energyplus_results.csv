@@ -1,0 +1,37 @@
+city,material,u_set,u_value,heating_kwh_m2,cooling_kwh_m2
+Mexico City,Concrete (ref.),measured,2.16,18.77,6.25
+Mexico City,Concrete (ref.),tabulated,3.0,28.05,10.9
+Mexico City,Adobe-type block,measured,2.07,18.73,1.14
+Mexico City,Adobe-type block,tabulated,2.44,22.75,1.71
+Mexico City,Volcanic stone (recinto),measured,2.73,15.04,24.25
+Mexico City,Volcanic stone (recinto),tabulated,3.29,19.59,32.46
+Mexico City,Tepetate ashlar,measured,1.5,15.01,0.06
+Mexico City,Tepetate ashlar,tabulated,2.21,22.93,0.08
+Mexico City,SBC block (solid),measured,1.89,16.45,2.6
+Mexico City,SBC block (solid),tabulated,2.59,24.23,4.93
+Mexico City,SBC block (hollow),measured,2.21,21.02,4.16
+Mexico City,SBC block (hollow),tabulated,1.99,18.47,3.39
+Merida,Concrete (ref.),measured,2.16,0.0,224.58
+Merida,Concrete (ref.),tabulated,3.0,0.01,260.81
+Merida,Adobe-type block,measured,2.07,0.0,192.72
+Merida,Adobe-type block,tabulated,2.44,0.0,205.46
+Merida,Volcanic stone (recinto),measured,2.73,0.0,299.04
+Merida,Volcanic stone (recinto),tabulated,3.29,0.0,330.31
+Merida,Tepetate ashlar,measured,1.5,0.0,151.96
+Merida,Tepetate ashlar,tabulated,2.21,0.0,169.03
+Merida,SBC block (solid),measured,1.89,0.0,199.81
+Merida,SBC block (solid),tabulated,2.59,0.0,227.75
+Merida,SBC block (hollow),measured,2.21,0.0,214.66
+Merida,SBC block (hollow),tabulated,1.99,0.0,205.62
+Hermosillo,Concrete (ref.),measured,2.16,6.66,229.09
+Hermosillo,Concrete (ref.),tabulated,3.0,10.0,280.3
+Hermosillo,Adobe-type block,measured,2.07,6.15,192.74
+Hermosillo,Adobe-type block,tabulated,2.44,7.55,211.14
+Hermosillo,Volcanic stone (recinto),measured,2.73,6.32,325.72
+Hermosillo,Volcanic stone (recinto),tabulated,3.29,8.06,370.5
+Hermosillo,Tepetate ashlar,measured,1.5,4.25,143.19
+Hermosillo,Tepetate ashlar,tabulated,2.21,6.89,169.93
+Hermosillo,SBC block (solid),measured,1.89,5.59,198.09
+Hermosillo,SBC block (solid),tabulated,2.59,8.36,237.6
+Hermosillo,SBC block (hollow),measured,2.21,7.19,218.18
+Hermosillo,SBC block (hollow),tabulated,1.99,6.28,205.47

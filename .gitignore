@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# figures written next to the scripts (the copies in figures/ are kept)
+pipeline/*.png
+# EnergyPlus run folders
+energyplus/runs/
+*.err
+*.eso
+*.audit
+# ecoinvent-derived detail: never publish
+pipeline/inputs/lca_brightway_full.xlsx
+*.xlsx
+# proprietary model files
+*.dsb
+# system
+.DS_Store
+Thumbs.db
+desktop.ini

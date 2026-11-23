@@ -1,0 +1,16 @@
+city,material,case,heating_kwh_m2,cooling_kwh_m2
+Mexico City,Adobe-type block,abs_0.65,14.253,3.354
+Mexico City,Volcanic stone (recinto),abs_0.65,22.955,7.868
+Mexico City,Tepetate ashlar,abs_0.65,7.761,0.873
+Mexico City,SBC block (solid),abs_0.65,14.499,3.989
+Mexico City,SBC block (hollow),abs_0.65,18.717,6.083
+Merida,Adobe-type block,abs_0.65,0.0,213.327
+Merida,Volcanic stone (recinto),abs_0.65,0.001,245.988
+Merida,Tepetate ashlar,abs_0.65,0.0,183.314
+Merida,SBC block (solid),abs_0.65,0.0,209.53
+Merida,SBC block (hollow),abs_0.65,0.0,225.757
+Hermosillo,Adobe-type block,abs_0.65,5.16,216.574
+Hermosillo,Volcanic stone (recinto),abs_0.65,8.241,260.701
+Hermosillo,Tepetate ashlar,abs_0.65,2.755,177.605
+Hermosillo,SBC block (solid),abs_0.65,5.149,209.324
+Hermosillo,SBC block (hollow),abs_0.65,6.657,231.167

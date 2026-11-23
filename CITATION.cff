@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the article and this repository."
+title: "Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: code and data"
+authors:
+  - family-names: "García Kerdán"
+    given-names: "Iván"
+    affiliation: "Tecnologico de Monterrey, School of Engineering and Sciences, Mexico City, Mexico"
+  - family-names: "Pérez Pastrana"
+    given-names: "Lydia E."
+  - family-names: "Gori"
+    given-names: "Virginia"
+version: "1.0.0"
+date-released: "2026-11-23"
+license: MIT
+repository-code: "https://github.com/kerdan85/wall-energy-lca-mexico"
+keywords: [EnergyPlus, life cycle assessment, Brightway, measured U-value, sargassum, Monte Carlo, Mexico]

@@ -1,0 +1,10 @@
+# Only for re-running the LCA. Needs an ecoinvent licence.
+# conda env create -f environment-brightway.yml
+name: brightway
+channels: [conda-forge, cmutel]
+dependencies:
+  - python=3.11
+  - brightway25
+  - scikit-umfpack   # fast sparse solver: without it the Monte Carlo takes hours instead of minutes
+  - pandas
+  - openpyxl

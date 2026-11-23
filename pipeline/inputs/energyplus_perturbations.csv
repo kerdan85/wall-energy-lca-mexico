@@ -1,0 +1,145 @@
+city,material,case,t,k,rho,cp,abs,heating_kwh_m2,cooling_kwh_m2
+Mexico City,Concrete (ref.),measured,0.12,0.40961,1200,880,0.65,18.775,6.255
+Mexico City,Concrete (ref.),tabulated,0.12,0.73469,1200,880,0.65,28.051,10.9
+Mexico City,Concrete (ref.),U+10,0.12,0.47833,1200,880,0.65,21.148,7.385
+Mexico City,Concrete (ref.),U-10,0.12,0.34843,1200,880,0.65,16.413,5.19
+Mexico City,Concrete (ref.),cp+30,0.12,0.40961,1200,1144.0,0.65,16.353,4.559
+Mexico City,Concrete (ref.),cp-30,0.12,0.40961,1200,616.0,0.65,21.895,8.526
+Mexico City,Concrete (ref.),check_U+10_cp+20,0.12,0.47833,1200,1056.0,0.65,19.266,6.068
+Mexico City,Adobe-type block,measured,0.12,0.38327,1600,1000,0.55,18.729,1.138
+Mexico City,Adobe-type block,tabulated,0.12,0.50034,1600,1000,0.55,22.751,1.713
+Mexico City,Adobe-type block,U+10,0.12,0.44581,1600,1000,0.55,20.973,1.437
+Mexico City,Adobe-type block,U-10,0.12,0.32718,1600,1000,0.55,16.501,0.898
+Mexico City,Adobe-type block,cp+30,0.12,0.38327,1600,1300.0,0.55,16.717,0.623
+Mexico City,Adobe-type block,cp-30,0.12,0.38327,1600,700.0,0.55,21.923,2.337
+Mexico City,Adobe-type block,check_U+10_cp+20,0.12,0.44581,1600,1200.0,0.55,19.324,0.947
+Mexico City,Adobe-type block,U_only,0.12,0.38327,1200,880,0.65,17.788,5.8
+Mexico City,Volcanic stone (recinto),measured,0.12,0.61131,1400,900,0.85,15.04,24.249
+Mexico City,Volcanic stone (recinto),tabulated,0.12,0.89585,1400,900,0.85,19.594,32.459
+Mexico City,Volcanic stone (recinto),U+10,0.12,0.73619,1400,900,0.85,17.223,28.177
+Mexico City,Volcanic stone (recinto),U-10,0.12,0.50633,1400,900,0.85,12.936,20.511
+Mexico City,Volcanic stone (recinto),cp+30,0.12,0.61131,1400,1170.0,0.85,12.3,20.065
+Mexico City,Volcanic stone (recinto),cp-30,0.12,0.61131,1400,630.0,0.85,18.971,29.746
+Mexico City,Volcanic stone (recinto),check_U+10_cp+20,0.12,0.73619,1400,1080.0,0.85,15.025,24.852
+Mexico City,Volcanic stone (recinto),U_only,0.12,0.61131,1200,880,0.65,25.057,9.339
+Mexico City,Tepetate ashlar,measured,0.2,0.40268,1500,1000,0.45,15.008,0.064
+Mexico City,Tepetate ashlar,tabulated,0.2,0.70799,1500,1000,0.45,22.925,0.081
+Mexico City,Tepetate ashlar,U+10,0.2,0.45865,1500,1000,0.45,16.678,0.061
+Mexico City,Tepetate ashlar,U-10,0.2,0.35042,1500,1000,0.45,13.342,0.075
+Mexico City,Tepetate ashlar,cp+30,0.2,0.40268,1500,1300.0,0.45,14.289,0.04
+Mexico City,Tepetate ashlar,cp-30,0.2,0.40268,1500,700.0,0.45,16.487,0.132
+Mexico City,Tepetate ashlar,check_U+10_cp+20,0.2,0.45865,1500,1200.0,0.45,16.002,0.042
+Mexico City,Tepetate ashlar,U_only,0.12,0.24161,1200,880,0.65,11.686,3.293
+Mexico City,SBC block (solid),measured,0.12,0.33417,1250,1000,0.6,16.455,2.597
+Mexico City,SBC block (solid),tabulated,0.12,0.5553,1250,1000,0.6,24.225,4.934
+Mexico City,SBC block (solid),U+10,0.12,0.38585,1250,1000,0.6,18.543,3.158
+Mexico City,SBC block (solid),U-10,0.12,0.28716,1250,1000,0.6,14.402,2.104
+Mexico City,SBC block (solid),cp+30,0.12,0.33417,1250,1300.0,0.6,14.486,1.625
+Mexico City,SBC block (solid),cp-30,0.12,0.33417,1250,700.0,0.6,19.346,4.266
+Mexico City,SBC block (solid),check_U+10_cp+20,0.12,0.38585,1250,1200.0,0.6,16.946,2.329
+Mexico City,SBC block (solid),U_only,0.12,0.33417,1200,880,0.65,15.83,4.936
+Mexico City,SBC block (hollow),measured,0.15,0.53099,900,1000,0.6,21.021,4.161
+Mexico City,SBC block (hollow),tabulated,0.15,0.45111,900,1000,0.6,18.47,3.388
+Mexico City,SBC block (hollow),U+10,0.15,0.6215,900,1000,0.6,23.591,4.995
+Mexico City,SBC block (hollow),U-10,0.15,0.45077,900,1000,0.6,18.458,3.385
+Mexico City,SBC block (hollow),cp+30,0.15,0.53099,900,1300.0,0.6,18.495,2.788
+Mexico City,SBC block (hollow),cp-30,0.15,0.53099,900,700.0,0.6,24.332,6.126
+Mexico City,SBC block (hollow),check_U+10_cp+20,0.15,0.6215,900,1200.0,0.6,21.628,3.895
+Mexico City,SBC block (hollow),U_only,0.12,0.4248,1200,880,0.65,19.322,6.512
+Mexico City,Tepetate ashlar,equal_thickness,0.12,0.40268,1500,1000,0.45,26.269,0.319
+Merida,Concrete (ref.),measured,0.12,0.40961,1200,880,0.65,0.0,224.581
+Merida,Concrete (ref.),tabulated,0.12,0.73469,1200,880,0.65,0.005,260.808
+Merida,Concrete (ref.),U+10,0.12,0.47833,1200,880,0.65,0.0,234.225
+Merida,Concrete (ref.),U-10,0.12,0.34843,1200,880,0.65,0.0,214.688
+Merida,Concrete (ref.),cp+30,0.12,0.40961,1200,1144.0,0.65,0.0,219.997
+Merida,Concrete (ref.),cp-30,0.12,0.40961,1200,616.0,0.65,0.002,229.738
+Merida,Concrete (ref.),check_U+10_cp+20,0.12,0.47833,1200,1056.0,0.65,0.0,230.884
+Merida,Adobe-type block,measured,0.12,0.38327,1600,1000,0.55,0.0,192.717
+Merida,Adobe-type block,tabulated,0.12,0.50034,1600,1000,0.55,0.0,205.463
+Merida,Adobe-type block,U+10,0.12,0.44581,1600,1000,0.55,0.0,199.911
+Merida,Adobe-type block,U-10,0.12,0.32718,1600,1000,0.55,0.0,185.391
+Merida,Adobe-type block,cp+30,0.12,0.38327,1600,1300.0,0.55,0.0,188.407
+Merida,Adobe-type block,cp-30,0.12,0.38327,1600,700.0,0.55,0.0,198.525
+Merida,Adobe-type block,check_U+10_cp+20,0.12,0.44581,1600,1200.0,0.55,0.0,196.607
+Merida,Adobe-type block,U_only,0.12,0.38327,1200,880,0.65,0.0,220.483
+Merida,Volcanic stone (recinto),measured,0.12,0.61131,1400,900,0.85,0.001,299.038
+Merida,Volcanic stone (recinto),tabulated,0.12,0.89585,1400,900,0.85,0.002,330.305
+Merida,Volcanic stone (recinto),U+10,0.12,0.73619,1400,900,0.85,0.001,314.505
+Merida,Volcanic stone (recinto),U-10,0.12,0.50633,1400,900,0.85,0.0,283.097
+Merida,Volcanic stone (recinto),cp+30,0.12,0.61131,1400,1170.0,0.85,0.0,292.51
+Merida,Volcanic stone (recinto),cp-30,0.12,0.61131,1400,630.0,0.85,0.003,306.716
+Merida,Volcanic stone (recinto),check_U+10_cp+20,0.12,0.73619,1400,1080.0,0.85,0.001,309.605
+Merida,Volcanic stone (recinto),U_only,0.12,0.61131,1200,880,0.65,0.002,249.555
+Merida,Tepetate ashlar,measured,0.2,0.40268,1500,1000,0.45,0.0,151.962
+Merida,Tepetate ashlar,tabulated,0.2,0.70799,1500,1000,0.45,0.0,169.027
+Merida,Tepetate ashlar,U+10,0.2,0.45865,1500,1000,0.45,0.0,155.544
+Merida,Tepetate ashlar,U-10,0.2,0.35042,1500,1000,0.45,0.0,148.432
+Merida,Tepetate ashlar,cp+30,0.2,0.40268,1500,1300.0,0.45,0.0,149.604
+Merida,Tepetate ashlar,cp-30,0.2,0.40268,1500,700.0,0.45,0.0,155.498
+Merida,Tepetate ashlar,check_U+10_cp+20,0.2,0.45865,1500,1200.0,0.45,0.0,153.761
+Merida,Tepetate ashlar,U_only,0.12,0.24161,1200,880,0.65,0.0,193.565
+Merida,SBC block (solid),measured,0.12,0.33417,1250,1000,0.6,0.0,199.806
+Merida,SBC block (solid),tabulated,0.12,0.5553,1250,1000,0.6,0.0,227.751
+Merida,SBC block (solid),U+10,0.12,0.38585,1250,1000,0.6,0.0,207.58
+Merida,SBC block (solid),U-10,0.12,0.28716,1250,1000,0.6,0.0,191.884
+Merida,SBC block (solid),cp+30,0.12,0.33417,1250,1300.0,0.6,0.0,195.682
+Merida,SBC block (solid),cp-30,0.12,0.33417,1250,700.0,0.6,0.0,204.981
+Merida,SBC block (solid),check_U+10_cp+20,0.12,0.38585,1250,1200.0,0.6,0.0,204.457
+Merida,SBC block (solid),U_only,0.12,0.33417,1200,880,0.65,0.0,212.181
+Merida,SBC block (hollow),measured,0.15,0.53099,900,1000,0.6,0.0,214.655
+Merida,SBC block (hollow),tabulated,0.15,0.45111,900,1000,0.6,0.0,205.617
+Merida,SBC block (hollow),U+10,0.15,0.6215,900,1000,0.6,0.0,223.51
+Merida,SBC block (hollow),U-10,0.15,0.45077,900,1000,0.6,0.0,205.576
+Merida,SBC block (hollow),cp+30,0.15,0.53099,900,1300.0,0.6,0.0,210.062
+Merida,SBC block (hollow),cp-30,0.15,0.53099,900,700.0,0.6,0.002,219.924
+Merida,SBC block (hollow),check_U+10_cp+20,0.15,0.6215,900,1200.0,0.6,0.0,220.147
+Merida,SBC block (hollow),U_only,0.12,0.4248,1200,880,0.65,0.0,226.832
+Merida,Tepetate ashlar,equal_thickness,0.12,0.40268,1500,1000,0.45,0.0,175.263
+Hermosillo,Concrete (ref.),measured,0.12,0.40961,1200,880,0.65,6.657,229.095
+Hermosillo,Concrete (ref.),tabulated,0.12,0.73469,1200,880,0.65,9.998,280.3
+Hermosillo,Concrete (ref.),U+10,0.12,0.47833,1200,880,0.65,7.525,242.604
+Hermosillo,Concrete (ref.),U-10,0.12,0.34843,1200,880,0.65,5.793,215.364
+Hermosillo,Concrete (ref.),cp+30,0.12,0.40961,1200,1144.0,0.65,5.875,224.632
+Hermosillo,Concrete (ref.),cp-30,0.12,0.40961,1200,616.0,0.65,7.738,234.43
+Hermosillo,Concrete (ref.),check_U+10_cp+20,0.12,0.47833,1200,1056.0,0.65,6.903,239.292
+Hermosillo,Adobe-type block,measured,0.12,0.38327,1600,1000,0.55,6.151,192.74
+Hermosillo,Adobe-type block,tabulated,0.12,0.50034,1600,1000,0.55,7.548,211.136
+Hermosillo,Adobe-type block,U+10,0.12,0.44581,1600,1000,0.55,6.93,203.094
+Hermosillo,Adobe-type block,U-10,0.12,0.32718,1600,1000,0.55,5.369,182.253
+Hermosillo,Adobe-type block,cp+30,0.12,0.38327,1600,1300.0,0.55,5.513,189.09
+Hermosillo,Adobe-type block,cp-30,0.12,0.38327,1600,700.0,0.55,7.178,198.106
+Hermosillo,Adobe-type block,check_U+10_cp+20,0.12,0.44581,1600,1200.0,0.55,6.417,200.209
+Hermosillo,Adobe-type block,U_only,0.12,0.38327,1200,880,0.65,6.294,223.399
+Hermosillo,Volcanic stone (recinto),measured,0.12,0.61131,1400,900,0.85,6.323,325.719
+Hermosillo,Volcanic stone (recinto),tabulated,0.12,0.89585,1400,900,0.85,8.061,370.504
+Hermosillo,Volcanic stone (recinto),U+10,0.12,0.73619,1400,900,0.85,7.168,347.745
+Hermosillo,Volcanic stone (recinto),U-10,0.12,0.50633,1400,900,0.85,5.493,303.292
+Hermosillo,Volcanic stone (recinto),cp+30,0.12,0.61131,1400,1170.0,0.85,5.46,319.19
+Hermosillo,Volcanic stone (recinto),cp-30,0.12,0.61131,1400,630.0,0.85,7.611,333.517
+Hermosillo,Volcanic stone (recinto),check_U+10_cp+20,0.12,0.73619,1400,1080.0,0.85,6.475,342.853
+Hermosillo,Volcanic stone (recinto),U_only,0.12,0.61131,1200,880,0.65,8.936,264.225
+Hermosillo,Tepetate ashlar,measured,0.2,0.40268,1500,1000,0.45,4.253,143.195
+Hermosillo,Tepetate ashlar,tabulated,0.2,0.70799,1500,1000,0.45,6.886,169.934
+Hermosillo,Tepetate ashlar,U+10,0.2,0.45865,1500,1000,0.45,4.806,148.884
+Hermosillo,Tepetate ashlar,U-10,0.2,0.35042,1500,1000,0.45,3.704,137.493
+Hermosillo,Tepetate ashlar,cp+30,0.2,0.40268,1500,1300.0,0.45,3.98,142.004
+Hermosillo,Tepetate ashlar,cp-30,0.2,0.40268,1500,700.0,0.45,4.754,145.51
+Hermosillo,Tepetate ashlar,check_U+10_cp+20,0.2,0.45865,1500,1200.0,0.45,4.574,147.892
+Hermosillo,Tepetate ashlar,U_only,0.12,0.24161,1200,880,0.65,4.052,186.452
+Hermosillo,SBC block (solid),measured,0.12,0.33417,1250,1000,0.6,5.589,198.094
+Hermosillo,SBC block (solid),tabulated,0.12,0.5553,1250,1000,0.6,8.355,237.597
+Hermosillo,SBC block (solid),U+10,0.12,0.38585,1250,1000,0.6,6.333,208.963
+Hermosillo,SBC block (solid),U-10,0.12,0.28716,1250,1000,0.6,4.852,187.072
+Hermosillo,SBC block (solid),cp+30,0.12,0.33417,1250,1300.0,0.6,4.958,194.307
+Hermosillo,SBC block (solid),cp-30,0.12,0.33417,1250,700.0,0.6,6.548,203.216
+Hermosillo,SBC block (solid),check_U+10_cp+20,0.12,0.38585,1250,1200.0,0.6,5.824,206.063
+Hermosillo,SBC block (solid),U_only,0.12,0.33417,1200,880,0.65,5.579,211.89
+Hermosillo,SBC block (hollow),measured,0.15,0.53099,900,1000,0.6,7.189,218.175
+Hermosillo,SBC block (hollow),tabulated,0.15,0.45111,900,1000,0.6,6.279,205.474
+Hermosillo,SBC block (hollow),U+10,0.15,0.6215,900,1000,0.6,8.103,230.689
+Hermosillo,SBC block (hollow),U-10,0.15,0.45077,900,1000,0.6,6.275,205.416
+Hermosillo,SBC block (hollow),cp+30,0.15,0.53099,900,1300.0,0.6,6.372,213.772
+Hermosillo,SBC block (hollow),cp-30,0.15,0.53099,900,700.0,0.6,8.33,223.569
+Hermosillo,SBC block (hollow),check_U+10_cp+20,0.15,0.6215,900,1200.0,0.6,7.458,227.42
+Hermosillo,SBC block (hollow),U_only,0.12,0.4248,1200,880,0.65,6.857,232.241
+Hermosillo,Tepetate ashlar,equal_thickness,0.12,0.40268,1500,1000,0.45,7.919,173.417

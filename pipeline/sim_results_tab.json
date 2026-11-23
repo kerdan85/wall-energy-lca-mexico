@@ -1,0 +1,26 @@
+{
+ "CDMX": {
+  "Concrete (ref.)": 66.10665341093815,
+  "Adobe-type block": 46.458532475991944,
+  "Volcanic stone (recinto)": 68.93174045737682,
+  "Tepetate ashlar": 43.02211206402735,
+  "SBC block (solid)": 53.66586179375776,
+  "SBC block (hollow)": 45.49236396935572
+ },
+ "Warm-subhumid": {
+  "Concrete (ref.)": 118.55476364044132,
+  "Adobe-type block": 107.57253087063474,
+  "Volcanic stone (recinto)": 120.01277061865069,
+  "Tepetate ashlar": 105.66244927903138,
+  "SBC block (solid)": 111.49677876978936,
+  "SBC block (hollow)": 107.02254465552397
+ },
+ "Hot-arid": {
+  "Concrete (ref.)": 194.0131046318159,
+  "Adobe-type block": 178.32999410531767,
+  "Volcanic stone (recinto)": 197.94870017365758,
+  "Tepetate ashlar": 174.0726100034267,
+  "SBC block (solid)": 183.46939913005662,
+  "SBC block (hollow)": 172.7583001604576
+ }
+}

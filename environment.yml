@@ -1,0 +1,9 @@
+# Analysis pipeline (no licence needed).  conda env create -f environment.yml
+name: wall-lca
+channels: [conda-forge]
+dependencies:
+  - python=3.11
+  - numpy
+  - matplotlib
+  - pillow
+  - spyder        # optional: remove if you use another editor
