@@ -1,6 +1,6 @@
 # Wall materials for urban housing: energy simulation + LCA framework
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24453797.svg)](https://doi.org/10.5281/zenodo.24453797)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24485678.svg)](https://doi.org/10.5281/zenodo.24485678)
 
 Code and data for the article:
 
@@ -306,6 +306,6 @@ The wall names (e.g. `"SBC block (solid)"`) are used as keys across the scripts.
 
 **Funding:** Secretaría de Educación, Ciencia, Tecnología e Innovación de la Ciudad de México (SECTEI), agreement SECTEI/105/2025.
 
-**How to cite:** please cite the article and this repository: García Kerdán I., Pérez Pastrana L.E., Gori V. (2026). *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: code and data*. Zenodo. https://doi.org/10.5281/zenodo.24453797
+**How to cite:** please cite the article and this repository: García Kerdán I., Pérez Pastrana L.E., Gori V. (2026). *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: code and data*. Zenodo. https://doi.org/10.5281/zenodo.24485678
 
 **Contact:** Iván García Kerdán, Tecnologico de Monterrey, School of Engineering and Sciences, Mexico City, Mexico.
