@@ -72,3 +72,45 @@ def energyplus_perturbations():
         print("[lca_inputs] energyplus_perturbations.csv incomplete -> derivatives from the 5R1C model"); return None
     print("[lca_inputs] derivatives and checks read from inputs/energyplus_perturbations.csv (EnergyPlus)")
     return out
+
+# ---------------- revision 2: insulated benchmark, comfort, 2050 climate ----------------
+def _cases(name, material=None):
+    """{city:{material:{case:(heat,cool)}}} from a conditioned-run table, or None."""
+    rows = _rows(name)
+    if not rows: return None
+    out = {c: {} for c in CITIES}
+    for r in rows:
+        c = CITYALIAS.get(r["city"].strip().lower()); m = r["material"].strip()
+        if c is None or (material and m != material): continue
+        out[c].setdefault(m, {})[r["case"].strip()] = (float(r["heating_kwh_m2"]), float(r["cooling_kwh_m2"]))
+    return out
+
+def insulated(name="Concrete + EPS (insulated)"):
+    d = _cases("energyplus_insulated.csv", name)
+    if d and all(name in d[c] for c in CITIES):
+        print("[lca_inputs] insulated benchmark read from inputs/energyplus_insulated.csv (EnergyPlus)"); return {c: d[c][name] for c in CITIES}
+    print("[lca_inputs] inputs/energyplus_insulated.csv missing -> insulated benchmark skipped"); return None
+
+def climate2050():
+    d = _cases("energyplus_2050.csv")
+    if d: print("[lca_inputs] 2050 conditioning needs read from inputs/energyplus_2050.csv (EnergyPlus)")
+    return {c: {m: v["measured"] for m, v in d[c].items()} for c in CITIES} if d else None
+
+def comfort():
+    """{climate:{city:{material:dict(pct_above,pct_below,kh_above,kh_below)}}} or None."""
+    rows = _rows("energyplus_comfort.csv")
+    if not rows: return None
+    out = {}
+    for r in rows:
+        c = CITYALIAS.get(r["city"].strip().lower())
+        out.setdefault(r["climate"].strip(), {}).setdefault(c, {})[r["material"].strip()] = \
+            {k: float(r[k]) for k in ("pct_above", "pct_below", "kh_above", "kh_below")}
+    print("[lca_inputs] free-running comfort read from inputs/energyplus_comfort.csv (EnergyPlus)")
+    return out
+
+def lca_extra(name, default_mean, default_cv):
+    """Production carbon of an extra component (e.g. the EPS system) from lca_a1a3.csv, else a default."""
+    for r in (_rows("lca_a1a3.csv") or []):
+        if r["material"].strip() == name:
+            return float(r["gwp_mean"]), float(r["gwp_cv_pct"]), "brightway"
+    return default_mean, default_cv, "literature"

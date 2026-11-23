@@ -1,0 +1,22 @@
+city,material,case,U,heating_kwh_m2,cooling_kwh_m2
+Mexico City,Concrete (ref.),measured,2.16,10.79,12.74
+Mexico City,Adobe-type block,measured,2.07,10.38,3.93
+Mexico City,Volcanic stone (recinto),measured,2.73,8.52,40.49
+Mexico City,Tepetate ashlar,measured,1.5,7.84,0.47
+Mexico City,SBC block (solid),measured,1.89,9.16,6.73
+Mexico City,SBC block (hollow),measured,2.21,12.13,9.26
+Mexico City,Concrete + EPS (insulated),measured,0.84,2.32,3.78
+Merida,Concrete (ref.),measured,2.16,0.0,282.24
+Merida,Adobe-type block,measured,2.07,0.0,249.11
+Merida,Volcanic stone (recinto),measured,2.73,0.0,364.97
+Merida,Tepetate ashlar,measured,1.5,0.0,202.12
+Merida,SBC block (solid),measured,1.89,0.0,254.34
+Merida,SBC block (hollow),measured,2.21,0.0,272.36
+Merida,Concrete + EPS (insulated),measured,0.84,0.0,201.66
+Hermosillo,Concrete (ref.),measured,2.16,3.82,271.24
+Hermosillo,Adobe-type block,measured,2.07,3.37,232.8
+Hermosillo,Volcanic stone (recinto),measured,2.73,3.7,376.63
+Hermosillo,Tepetate ashlar,measured,1.5,2.06,177.01
+Hermosillo,SBC block (solid),measured,1.89,3.07,237.16
+Hermosillo,SBC block (hollow),measured,2.21,4.14,259.98
+Hermosillo,Concrete + EPS (insulated),measured,0.84,0.68,169.6

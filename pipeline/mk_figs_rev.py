@@ -17,12 +17,14 @@ CLIM=["CDMX","Warm-subhumid","Hot-arid"]; LAB=[S.CLIMLAB[c] for c in CLIM]
 REF="Concrete (ref.)"
 ORD=["Tepetate ashlar","SBC block (solid)","Adobe-type block","Concrete (ref.)","SBC block (hollow)","Volcanic stone (recinto)"]
 ALT=[m for m in ORD if m!=REF]; ALT.insert(ALT.index("SBC block (solid)")+1,"SBC block (solid, city-cast)")
+INS="Concrete + EPS (insulated)"; HAS_INS=INS in R["BASE"]["CDMX"]
+if HAS_INS: ALT.append(INS); ORD=ORD+[INS]
 SH={"Concrete (ref.)":"Concrete","Adobe-type block":"Earth\nblock","Volcanic stone (recinto)":"Volcanic\nstone",
-    "Tepetate ashlar":"Tepetate","SBC block (solid)":"SBC\nsolid","SBC block (hollow)":"SBC\nhollow","SBC block (solid, city-cast)":"SBC solid\ncity-cast"}
+    "Tepetate ashlar":"Tepetate","SBC block (solid)":"SBC\nsolid","SBC block (hollow)":"SBC\nhollow","SBC block (solid, city-cast)":"SBC solid\ncity-cast","Concrete + EPS (insulated)":"Insulated\nconcrete"}
 def gy(ax): ax.grid(axis="y",zorder=0); ax.set_axisbelow(True)
 
 # ---------- operational ----------
-fig,(a,b)=plt.subplots(1,2,figsize=(7.3,3.2),gridspec_kw={"width_ratios":[1.15,1]})
+fig,(a,b)=plt.subplots(1,2,figsize=(7.4,3.3),gridspec_kw={"width_ratios":[1.15,1]})
 x=np.arange(len(ORD)); w=0.26
 for i,c in enumerate(CLIM):
     v=np.array([sum(R["HC"][c][m]) for m in ORD]); lo=np.array([R["BAND"][c][m][0] for m in ORD]); hi=np.array([R["BAND"][c][m][1] for m in ORD])
@@ -33,15 +35,16 @@ for i,c in enumerate(CLIM):
     bb=b.bar(x+(i-1)*w,e,w,color=S.CLIMCOL[c],linewidth=0,zorder=3)
     b.bar_label(bb,labels=[f"{k:+.0f}" for k in e],padding=1.2,fontsize=5.2,color=MUT)
 for ax in (a,b):
-    ax.set_xticks(x); ax.set_xticklabels([SH[m] for m in ORD],fontsize=6.8); S.despine(ax); gy(ax)
+    ax.set_xticks(x); ax.set_xticklabels([SH[m] for m in ORD],fontsize=6.3); S.despine(ax); gy(ax)
 a.set_ylabel("Annual heating + cooling need\n(kWh m$^{-2}$ yr$^{-1}$, thermal)"); a.set_ylim(0,1.38*max(v for c in R["BAND"] for m in R["BAND"][c] for v in R["BAND"][c][m]))
 a.legend(loc="upper left",fontsize=6.6,handlelength=1.0,borderaxespad=0.2)
 b.axhline(0,color=INK,lw=0.8); b.set_ylabel("Error of tabulated-input prediction (%)"); b.set_ylim(-18,66)
+w=0.26
 S.panel(a,"a",x=-0.16); S.panel(b,"b",x=-0.17)
 plt.tight_layout(); plt.savefig(f"{OUT}/nat_operclimate.png"); plt.close()
 
 # ---------- offset with MC interval ----------
-fig,ax=plt.subplots(figsize=(6.4,3.4)); x=np.arange(len(ALT))
+fig,ax=plt.subplots(figsize=(7.0,3.5)); x=np.arange(len(ALT))
 for i,c in enumerate(CLIM):
     v=np.array([R["BASE"][c][m]["dCO2"] for m in ALT]); p5=np.array([R["MC"][c][m]["p5"] for m in ALT]); p95=np.array([R["MC"][c][m]["p95"] for m in ALT])
     ax.bar(x+(i-1)*w,v,w,color=S.CLIMCOL[c],label=LAB[i],linewidth=0,zorder=3)
@@ -51,11 +54,14 @@ for i,c in enumerate(CLIM):
     for xi,vv,lo,hi in zip(x+(i-1)*w,v,p5,p95):
         ax.text(xi,(hi+1.2 if vv>=0 else lo-1.2),(f"{vv:+.0f}" if abs(vv)>=0.5 else "0").replace("-","\u2212"),ha="center",va="bottom" if vv>=0 else "top",fontsize=5.6,color=MUT)
 ax.axhline(0,color=INK,lw=0.9)
-ax.set_xticks(x); ax.set_xticklabels([SH[m] if m=="SBC block (solid, city-cast)" else SH[m].replace("\n"," ") for m in ALT],fontsize=7.2)
+ax.set_xticks(x); ax.set_xticklabels([SH[m] if m in ("SBC block (solid, city-cast)",INS) else SH[m].replace("\n"," ") for m in ALT],fontsize=7.2)
 ax.set_ylabel("Lifetime CO$_2$ offset vs concrete\n(t CO$_2$-eq per dwelling, 50 yr)")
-ax.set_ylim(-60,54); S.despine(ax); gy(ax)
+ax.set_ylim(-60,64); S.despine(ax); gy(ax)
+if HAS_INS:
+    xb=len(ALT)-1.5; ax.axvline(xb,color=MUT,lw=0.7,ls=(0,(2,2)),zorder=2)
+    ax.text(xb+0.08,-57,"benchmark",fontsize=6.4,color=MUT,style="italic",ha="left",va="bottom")
 h,l=ax.get_legend_handles_labels(); h.append(ml.Line2D([],[],color=INK,lw=0.8,marker="_",ms=5)); l.append("Monte-Carlo P5–P95")
-ax.legend(h,l,loc="upper right",fontsize=6.6,handlelength=1.1)
+ax.legend(h,l,loc="lower left",fontsize=6.6,handlelength=1.1,ncol=2)
 plt.tight_layout(); plt.savefig(f"{OUT}/nat_offsetclimate.png"); plt.close()
 
 # ---------- cost-carbon quadrant ----------
@@ -96,8 +102,9 @@ ax.legend(handles=hs,loc="lower left",fontsize=6.6,handletextpad=0.3,borderaxesp
 plt.tight_layout(); plt.savefig(f"{OUT}/nat_costcarbon.png"); plt.close()
 
 # ---------- OAT sensitivity of the offset ----------
-PAN=["Tepetate ashlar","Adobe-type block","SBC block (solid)","SBC block (solid, city-cast)","SBC block (hollow)","Volcanic stone (recinto)"]
-fig,axes=plt.subplots(2,3,figsize=(7.4,5.3)); axs=axes.ravel()
+PAN=["Tepetate ashlar","Adobe-type block","SBC block (solid)","SBC block (solid, city-cast)","SBC block (hollow)","Volcanic stone (recinto)"]+([INS] if HAS_INS else [])
+NAME[INS]="Insulated concrete"
+fig,axes=plt.subplots(2,4,figsize=(7.6,5.0)); axs=axes.ravel()
 labs=[p[0] for p in R["OAT"]["CDMX"][PAN[0]]]; ny=len(labs); hh=0.25
 for ax,m in zip(axs,PAN):
     for i,c in enumerate(CLIM):
@@ -105,14 +112,15 @@ for ax,m in zip(axs,PAN):
             y=ny-1-j+(1-i)*hh
             ax.barh(y,hi-lo,left=lo,height=hh*0.9,color=S.CLIMCOL[c],linewidth=0,zorder=3)
     ax.axvline(0,color=INK,lw=0.8,zorder=4)
-    ax.set_yticks(range(ny)); ax.set_yticklabels(labs[::-1] if ax in (axs[0],axs[3]) else [],fontsize=6.2)
-    ax.set_title(NAME[m]+"  (base "+" / ".join(("%+.0f"%v if abs(v)>=0.5 else "0") for v in (R["BASE"][c][m]["dCO2"] for c in CLIM)).replace("-","\u2212")+" t)",fontsize=7.2,loc="left")
+    ax.set_yticks(range(ny)); ax.set_yticklabels(labs[::-1] if ax in (axs[0],axs[4]) else [],fontsize=6.0)
+    ax.set_title(NAME[m]+"\n(base "+" / ".join(("%+.0f"%v if abs(v)>=0.5 else "0") for v in (R["BASE"][c][m]["dCO2"] for c in CLIM)).replace("-","\u2212")+" t)",fontsize=7.2,loc="left")
     for s in ["top","right","left"]: ax.spines[s].set_visible(False)
     ax.tick_params(axis="y",length=0); ax.grid(axis="x",zorder=0); ax.set_axisbelow(True); ax.tick_params(axis="x",labelsize=6.5)
     lim=max(abs(v) for c in CLIM for p in R["OAT"][c][m] for v in p[1:])*1.12; ax.set_xlim(-lim,lim)
-fig.legend(handles=[Patch(fc=S.CLIMCOL[c],label=S.CLIMLAB[c]) for c in CLIM],loc="lower center",ncol=3,fontsize=7.2,frameon=False,bbox_to_anchor=(0.5,0.0))
-fig.supxlabel("Change in lifetime CO$_2$ offset relative to the base case (t CO$_2$-eq per dwelling)",fontsize=8.2,y=0.05)
-plt.tight_layout(rect=[0,0.07,1,1]); plt.savefig(f"{OUT}/nat_sensitivity.png"); plt.close()
+for ax in axs[len(PAN):]: ax.axis("off")
+axs[-1].legend(handles=[Patch(fc=S.CLIMCOL[c],label=S.CLIMLAB[c].replace(" (","\n(")) for c in CLIM],loc="center",fontsize=6.8,frameon=False,labelspacing=1.0)
+fig.supxlabel("Change in lifetime CO$_2$ offset relative to the base case (t CO$_2$-eq per dwelling)",fontsize=8.2,y=0.02)
+plt.tight_layout(rect=[0,0.03,1,1]); plt.savefig(f"{OUT}/nat_sensitivity.png"); plt.close()
 
 # ---------- measured vs tabulated U (with expanded uncertainty) ----------
 BLUE=S.BLUE
@@ -133,10 +141,10 @@ plt.tight_layout(); plt.savefig(f"{OUT}/nat_thermal.png"); plt.close()
 # ---------- embodied carbon by city: production + transport ----------
 A1=R["A1A3"]
 DIST={c:[R["DIST"][c][m] for m in KEY] for c in CLIM} if False else None
-KEY=["Concrete (ref.)","Adobe-type block","Volcanic stone (recinto)","Tepetate ashlar","SBC block (solid)","SBC block (hollow)","SBC block (solid, city-cast)"]
+KEY=["Concrete (ref.)","Adobe-type block","Volcanic stone (recinto)","Tepetate ashlar","SBC block (solid)","SBC block (hollow)","SBC block (solid, city-cast)"]+([INS] if HAS_INS else [])
 DIST={c:tuple(R["DIST"][c][m] for m in KEY) for c in CLIM}
 ORDT=ORD[:2]+["SBC block (solid, city-cast)"]+ORD[2:]
-fig,axes=plt.subplots(1,3,figsize=(7.3,3.1),sharey=True)
+fig,axes=plt.subplots(1,3,figsize=(7.4,3.3),sharey=True)
 for k,c in enumerate(CLIM):
     ax=axes[k]; d=dict(zip(KEY,DIST[c])); prod=[A1[m] for m in ORDT]; tr=[R["MASS"][m]/1000*d[m]*0.10 for m in ORDT]; xx=np.arange(len(ORDT))
     ax.bar(xx,prod,color="#4a5560",label="Production (A1–A3)",linewidth=0,zorder=3)

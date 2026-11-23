@@ -92,9 +92,15 @@ def build(params):
     o.append(fmt("Site:GroundTemperature:BuildingSurface", [gt] * 12))
 
     # ---------------- materials and constructions ----------------
-    wm = p["wall"]   # dict name, thickness, k, rho, cp, sol_abs
+    wm = p["wall"]   # dict t, k, rho, cp, abs; optional "outer": list of extra layers (t, k, rho, cp), outside first
+    wall_layers = []
+    for i, (t_, k_, r_, c_) in enumerate(wm.get("outer", [])):
+        a_ = wm["abs"] if i == 0 else 0.6
+        o.append(fmt("Material", [f"WALL_OUT{i}", "MediumRough", t_, k_, r_, c_, 0.9, a_, a_]))
+        wall_layers.append(f"WALL_OUT{i}")
     o.append(fmt("Material", ["WALL_MAT", "MediumRough", wm["t"], wm["k"], wm["rho"], wm["cp"], 0.9,
                               wm["abs"], wm["abs"]]))
+    wall_layers.append("WALL_MAT")
     mats = [
         ("ASPHALT", 0.010, 0.70, 2100, 1000, 0.85), ("ROOF_INSUL", 0.1445, 0.0381, 12, 840, 0.6),
         ("PLASTERBOARD", 0.013, 0.25, 900, 1000, 0.6), ("FLOOR_INSUL", 0.1327, 0.04, 15, 1400, 0.6),
@@ -106,7 +112,7 @@ def build(params):
     o.append(fmt("Material:AirGap", ["AIRGAP", 0.15]))
     o.append(fmt("WindowMaterial:Glazing", ["CLEAR_6MM", "SpectralAverage", "", 0.006, 0.775, 0.071, 0.071,
                                             0.881, 0.080, 0.080, 0, 0.84, 0.84, 0.9]))
-    cons = [("EXT_WALL", ["WALL_MAT"]), ("FLAT_ROOF", ["ASPHALT", "ROOF_INSUL", "PLASTERBOARD"]),
+    cons = [("EXT_WALL", wall_layers), ("FLAT_ROOF", ["ASPHALT", "ROOF_INSUL", "PLASTERBOARD"]),
             ("GROUND_FLOOR", ["FLOOR_INSUL", "CAST_CONCRETE", "SCREED", "TIMBER_FLOOR"]),
             ("EXT_FLOOR", ["FLOOR_INSUL", "CAST_CONCRETE", "SCREED", "TIMBER_FLOOR"]),
             ("INT_FLOOR", ["INT_FLOOR_CONC"]), ("INT_CEILING", ["INT_FLOOR_CONC"]),
@@ -254,13 +260,14 @@ def build(params):
             o.append(fmt("ZoneVentilation:DesignFlowRate", [f"{zn}_NV", zn, "NATVENT", "AirChanges/Hour", "", "", "",
                                                             p["natvent_ach"], "Natural", 0, 1, 1, 0, 0, 0,
                                                             -100, "NV_TMIN", 100, "", p["natvent_dT"], "", -100, "", 100, "", 40]))
-        o.append(fmt("ZoneControl:Thermostat", [f"{zn}_TSTAT", zn, "DUAL", "ThermostatSetpoint:DualSetpoint", f"{U}_DUALSP"]))
-        o.append(fmt("ZoneHVAC:EquipmentConnections", [zn, f"{zn}_EQLIST", f"{zn}_INLET", "", f"{zn}_AIR", f"{zn}_RET"]))
-        o.append(fmt("ZoneHVAC:EquipmentList", [f"{zn}_EQLIST", "SequentialLoad", "ZoneHVAC:IdealLoadsAirSystem",
-                                                f"{zn}_IDEAL", 1, 1, "", ""]))
-        o.append(fmt("ZoneHVAC:IdealLoadsAirSystem", [f"{zn}_IDEAL", "", f"{zn}_INLET", "", "", 35, 13, 0.0156, 0.0077,
-                                                      "NoLimit", "", "", "NoLimit", "", "", "", "", "ConstantSensibleHeatRatio",
-                                                      0.7, "None", "OA_SPEC", "", "None", "NoEconomizer", "None", 0, 0]))
+        if not p.get("free_running"):
+            o.append(fmt("ZoneControl:Thermostat", [f"{zn}_TSTAT", zn, "DUAL", "ThermostatSetpoint:DualSetpoint", f"{U}_DUALSP"]))
+            o.append(fmt("ZoneHVAC:EquipmentConnections", [zn, f"{zn}_EQLIST", f"{zn}_INLET", "", f"{zn}_AIR", f"{zn}_RET"]))
+            o.append(fmt("ZoneHVAC:EquipmentList", [f"{zn}_EQLIST", "SequentialLoad", "ZoneHVAC:IdealLoadsAirSystem",
+                                                    f"{zn}_IDEAL", 1, 1, "", ""]))
+            o.append(fmt("ZoneHVAC:IdealLoadsAirSystem", [f"{zn}_IDEAL", "", f"{zn}_INLET", "", "", 35, 13, 0.0156, 0.0077,
+                                                          "NoLimit", "", "", "NoLimit", "", "", "", "", "ConstantSensibleHeatRatio",
+                                                          0.7, "None", "OA_SPEC", "", "None", "NoEconomizer", "None", 0, 0]))
     o.append(fmt("OutputControl:Table:Style", ["CommaAndHTML", "JtoKWH"]))
     o.append(fmt("Output:Table:SummaryReports", ["AnnualBuildingUtilityPerformanceSummary", "EnvelopeSummary",
                                                  "InputVerificationandResultsSummary", "SensibleHeatGainSummary",
@@ -268,6 +275,10 @@ def build(params):
     o.append(fmt("Output:Variable", ["*", "Zone Ideal Loads Supply Air Total Heating Energy", "RunPeriod"]))
     o.append(fmt("Output:Variable", ["*", "Zone Ideal Loads Supply Air Total Cooling Energy", "RunPeriod"]))
     o.append(fmt("Output:Variable", ["*", "Zone Ideal Loads Supply Air Total Heating Energy", "Monthly"]))
+    if p.get("free_running"):
+        o.append(fmt("Output:Variable", ["*", "Zone Operative Temperature", "Hourly"]))
+        o.append(fmt("Output:Variable", ["Environment", "Site Outdoor Air Drybulb Temperature", "Hourly"]))
+        o.append(fmt("Output:SQLite", ["Simple"]))
     o.append(fmt("Output:Diagnostics", ["DisplayExtraWarnings"]))
     return "".join(o)
 

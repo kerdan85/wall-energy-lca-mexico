@@ -1,0 +1,43 @@
+city,material,climate,pct_above,pct_below,kh_above,kh_below
+Mexico City,Concrete (ref.),present,1.28,45.74,29.33,3164.57
+Mexico City,Concrete (ref.),2050,2.4,36.79,65.92,2124.06
+Mexico City,Adobe-type block,present,0.04,48.08,0.36,3066.83
+Mexico City,Adobe-type block,2050,0.16,36.47,2.18,1928.35
+Mexico City,Volcanic stone (recinto),present,6.71,36.11,277.05,2447.82
+Mexico City,Volcanic stone (recinto),2050,9.63,28.29,446.47,1648.72
+Mexico City,Tepetate ashlar,present,0.0,54.39,0.0,3029.5
+Mexico City,Tepetate ashlar,2050,0.0,36.9,0.0,1742.89
+Mexico City,SBC block (solid),present,0.23,44.51,4.04,2793.55
+Mexico City,SBC block (solid),2050,0.79,33.74,12.99,1761.15
+Mexico City,SBC block (hollow),present,0.68,48.98,11.73,3484.2
+Mexico City,SBC block (hollow),2050,1.55,39.86,33.48,2351.18
+Mexico City,Concrete + EPS (insulated),present,0.16,24.99,1.91,1186.72
+Mexico City,Concrete + EPS (insulated),2050,0.44,14.54,6.63,586.94
+Merida,Concrete (ref.),present,32.21,3.37,1958.96,119.88
+Merida,Concrete (ref.),2050,41.04,2.3,2816.49,65.36
+Merida,Adobe-type block,present,28.93,2.67,1304.94,83.37
+Merida,Adobe-type block,2050,39.28,1.67,2105.99,41.63
+Merida,Volcanic stone (recinto),present,40.26,3.51,3295.78,145.12
+Merida,Volcanic stone (recinto),2050,48.09,2.49,4317.61,85.1
+Merida,Tepetate ashlar,present,19.37,1.05,580.18,17.77
+Merida,Tepetate ashlar,2050,32.24,0.42,1199.54,4.96
+Merida,SBC block (solid),present,31.24,2.6,1577.62,77.96
+Merida,SBC block (solid),2050,41.58,1.6,2432.97,38.43
+Merida,SBC block (hollow),present,30.2,3.5,1714.9,126.93
+Merida,SBC block (hollow),2050,38.9,2.42,2522.95,69.86
+Merida,Concrete + EPS (insulated),present,32.06,0.13,1191.86,1.1
+Merida,Concrete + EPS (insulated),2050,47.62,0.04,2154.6,0.15
+Hermosillo,Concrete (ref.),present,44.77,13.26,5077.32,968.26
+Hermosillo,Concrete (ref.),2050,50.79,10.6,6499.37,699.56
+Hermosillo,Adobe-type block,present,41.27,13.14,4099.66,899.15
+Hermosillo,Adobe-type block,2050,47.43,10.34,5438.33,625.88
+Hermosillo,Volcanic stone (recinto),present,52.75,10.7,7353.53,836.68
+Hermosillo,Volcanic stone (recinto),2050,58.15,8.6,8948.44,618.35
+Hermosillo,Tepetate ashlar,present,35.23,13.43,2905.92,825.72
+Hermosillo,Tepetate ashlar,2050,42.61,10.34,4139.01,538.73
+Hermosillo,SBC block (solid),present,43.39,12.27,4525.79,836.59
+Hermosillo,SBC block (solid),2050,49.66,9.6,5921.85,584.03
+Hermosillo,SBC block (hollow),present,42.87,14.15,4645.73,1036.73
+Hermosillo,SBC block (hollow),2050,48.77,11.28,6017.99,748.73
+Hermosillo,Concrete + EPS (insulated),present,44.21,7.22,4012.02,360.41
+Hermosillo,Concrete + EPS (insulated),2050,51.56,4.82,5515.38,208.76

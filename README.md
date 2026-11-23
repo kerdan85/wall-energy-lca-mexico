@@ -1,14 +1,12 @@
 # Wall materials for urban housing: energy simulation + LCA framework
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24452515.svg)](https://doi.org/10.5281/zenodo.24452515)
-
 Code and data for the article:
 
 > García Kerdán I., Pérez Pastrana L.E., Gori V. *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: from measured U-values to whole-life carbon and cost.* Energy (under review).
 
 The framework links four stages: **(1)** measured wall transmittance → **(2)** a calibrated EnergyPlus model of a social-housing dwelling in three Mexican climates → **(3)** production carbon (A1–A3) from Brightway/ecoinvent plus transport (A4) and operation (B6) → **(4)** carbon offset and net present cost against a concrete-block reference, with Monte Carlo, scenario and sensitivity analyses.
 
-Seven walls are compared: lightweight concrete block (reference), stabilised earth block, volcanic stone (*recinto*), *tepetate* ashlar, and solid, hollow and city-cast sargassum-based concrete (SBC) blocks. The cities are Mexico City, Mérida and Hermosillo.
+Seven walls are compared: lightweight concrete block (reference), stabilised earth block, volcanic stone (*recinto*), *tepetate* ashlar, and solid, hollow and city-cast sargassum-based concrete (SBC) blocks, plus an **insulated concrete benchmark** (the reference block with 25 mm EPS external insulation). The cities are Mexico City, Mérida and Hermosillo. Every wall is assessed **with air conditioning** (energy, carbon, cost) and **free-running** (adaptive thermal comfort, EN 16798-1), in the **present** and the **2041–2060 climate** (CMIP6 SSP2-4.5), and the results are scaled to the 1.8 million dwellings of the national housing programme.
 
 ---
 
@@ -32,7 +30,7 @@ The repository is built so that **each level only needs what the level before it
 | Level | What it does | Software | Licence | Time |
 |---|---|---|---|---|
 | 1 | Recomputes all offsets, costs, Monte Carlo, scenarios and the 13 data figures from the stored tables | Python 3.10+ with numpy, matplotlib, Pillow | None (all open source) | ~15 s |
-| 2 | Re-runs the 36 EnergyPlus cases and 108 derivative runs; replays the calibration | Level 1 + **EnergyPlus 25.1** | None (EnergyPlus is free, BSD-3) | ~3 min (2 cores) to 10 min |
+| 2 | Re-runs the 36 EnergyPlus cases and 108 derivative runs, the insulated benchmark, the free-running comfort runs and the 2050 runs (84 more); replays the calibration | Level 1 + **EnergyPlus 25.1** | None (EnergyPlus is free, BSD-3) | ~5 min (2 cores) to 15 min |
 | 3 | Recomputes production carbon A1–A3 (six impact categories, 1,000 Monte Carlo runs) | Level 1 + **Brightway 2.5** + **ecoinvent 3.9.1 cut-off** | **ecoinvent licence required** (paid; free for some academic users in low- and middle-income countries) | ~10 min with scikit-umfpack, several hours without |
 
 **No ecoinvent licence?** You can still do everything in Levels 1 and 2. The ecoinvent-based results enter the analysis only through one small table, `pipeline/inputs/lca_a1a3.csv`, which is included. You can also replace that table with production-carbon values from any other source (EPDs, another database, your own inventory): see [Section 6](#6-using-the-framework-for-your-own-walls-or-cities).
@@ -54,10 +52,11 @@ wall-energy-lca-mexico/
 │   ├── run_36.py             calibrated operation settings (CALIBRATED)
 │   ├── run_ep_all.py         all runs of the paper → energyplus_results.csv, energyplus_perturbations.csv
 │   ├── calib.py              replays the 13 DesignBuilder runs, prints NMBE and CV(RMSE)
+│   ├── run_extensions.py     insulated benchmark, free-running comfort, 2050 climate (morphs the weather files)
 │   ├── colour_check.py       optional: removes the effect of wall colour (absorptance 0.65 for all)
 │   ├── db_runs.json          summary results of the original DesignBuilder runs
 │   ├── example/              one ready-made IDF (open it in EnergyPlus / IDF Editor)
-│   ├── weather/              the three TMYx weather files, with credits
+│   ├── weather/              the three TMYx weather files, with credits; weather/2050/ the morphed files
 │   └── *.csv                 the EnergyPlus results used in the paper
 ├── pipeline/                 LEVEL 1
 │   ├── run_all.py            ← run this: reproduces everything
@@ -68,6 +67,9 @@ wall-energy-lca-mexico/
 │   ├── inputs/               the tables that link the levels
 │   │   ├── energyplus_results.csv        ← from Level 2
 │   │   ├── energyplus_perturbations.csv  ← from Level 2
+│   │   ├── energyplus_insulated.csv      ← from Level 2 (run_extensions.py)
+│   │   ├── energyplus_comfort.csv        ← from Level 2 (run_extensions.py)
+│   │   ├── energyplus_2050.csv           ← from Level 2 (run_extensions.py)
 │   │   └── lca_a1a3.csv                  ← from Level 3 (aggregated results, no ecoinvent data)
 │   ├── brightway/            LEVEL 3
 │   │   └── brightway_acv_paper.py
@@ -76,7 +78,7 @@ wall-energy-lca-mexico/
 └── figures/                  output of run_all.py (the figures of the paper)
 ```
 
-The three tables in `pipeline/inputs/` are the only connection between the levels. If you re-run Level 2 or 3, they are overwritten, and running Level 1 again propagates the change to every number and figure.
+The tables in `pipeline/inputs/` are the only connection between the levels. If you re-run Level 2 or 3, they are overwritten, and running Level 1 again propagates the change to every number and figure.
 
 ---
 
@@ -169,7 +171,14 @@ These are the NMBE and CV(RMSE) reported in the paper (ASHRAE Guideline 14).
 ```bash
 python run_ep_all.py
 ```
-This runs 144 simulations in parallel (6 walls × 3 cities × 2 U-value sets, plus the derivative runs used by the Monte Carlo). It writes `energyplus_results.csv` and `energyplus_perturbations.csv` in `energyplus/` and **copies them to `pipeline/inputs/`**. Then go back to Level 1 (`python ../pipeline/run_all.py`) to propagate the results.
+This runs 144 simulations in parallel (6 walls × 3 cities × 2 U-value sets, plus the derivative runs used by the Monte Carlo). It writes `energyplus_results.csv` and `energyplus_perturbations.csv` in `energyplus/` and **copies them to `pipeline/inputs/`**. Then run the extensions:
+
+```bash
+python run_extensions.py
+```
+This writes the morphed 2041–2060 weather files to `weather/2050/` (dry-bulb shifted by +1.52 K in Mexico City and Hermosillo, +1.36 K in Mérida, relative humidity kept), and runs the insulated benchmark (7 cases × 3 cities), every wall free-running in both climates (scored against the EN 16798-1 Category II adaptive band from EnergyPlus's SQLite output), and every wall conditioned in the 2050 climate. It writes `energyplus_insulated.csv`, `energyplus_comfort.csv` and `energyplus_2050.csv`, again copied to `pipeline/inputs/`.
+
+Then go back to Level 1 (`python ../pipeline/run_all.py`) to propagate the results.
 
 On Windows, run the script from a terminal rather than from the Spyder console, because Python's multiprocessing does not work reliably inside Spyder on Windows.
 
@@ -226,6 +235,12 @@ The script prints the impact methods it selected (ReCiPe 2016 v1.03 midpoint (H)
 - `pipeline/inputs/lca_a1a3.csv`: the table the pipeline reads (safe to share).
 - `pipeline/inputs/lca_brightway_full.xlsx`: inventory, contribution analysis and Monte Carlo samples. This file contains ecoinvent-derived process detail, so **do not publish it**. It is excluded by `.gitignore`.
 
+To re-run only one item (for example the EPS insulation system of the benchmark) and keep the other rows of `lca_a1a3.csv`:
+```bash
+python brightway_acv_paper.py --only "EPS insulation system (25 mm)"
+```
+If this row is absent, `mk_robust.py` uses a literature default of 6.0 kg CO₂-eq/m² (CV 30%) and says so in the console.
+
 Then run Level 1 again.
 
 ---
@@ -242,6 +257,9 @@ The framework is general: any wall, any climate with an EPW file, any source of 
 | Prices, electricity tariff, discount rate, grid emission factor, cooling COP | `PRICE`, `CE`, `R`, `F_GRID`, `COP_C` at the top of `pipeline/mk_robust.py` | |
 | Transport distances (source → city) | `DIST` in `pipeline/mk_robust.py` | Road distances, km |
 | Biogenic carbon of the sargassum blocks | `SARG_FRAC`, `C_FRAC` in `pipeline/mk_robust.py` | Reported separately, not in the offset |
+| Insulation of the benchmark (thickness, conductivity, cost) | `EPS`, `RENDER` in `energyplus/run_extensions.py`; `INS_COST` in `pipeline/mk_robust.py` | |
+| Future-climate warming | `DT2050` in `energyplus/run_extensions.py` | K added to the hourly dry-bulb |
+| Programme size | `N_PROG` in `pipeline/mk_robust.py` | Dwellings |
 
 The wall names (e.g. `"SBC block (solid)"`) are used as keys across the scripts. When you add a wall, use the same name everywhere.
 
@@ -266,7 +284,7 @@ The wall names (e.g. `"SBC block (solid)"`) are used as keys across the scripts.
 
 - **Code:** MIT licence (`LICENSE`).
 - **Data and figures:** CC BY 4.0 (`LICENSE-DATA.md`).
-- **Weather files:** TMYx files by Climate.OneBuilding.Org, redistributed unmodified with credit. Please cite *Lawrie L.K., Crawley D.B. (2022). Development of Global Typical Meteorological Years (TMYx). http://climate.onebuilding.org*. See `energyplus/weather/README.md`.
+- **Weather files:** TMYx files by Climate.OneBuilding.Org, redistributed unmodified with credit (the files in `weather/2050/` are derived from them by a temperature shift). Please cite *Lawrie L.K., Crawley D.B. (2022). Development of Global Typical Meteorological Years (TMYx). http://climate.onebuilding.org*. See `energyplus/weather/README.md`.
 - **EnergyPlus:** U.S. Department of Energy / NREL, BSD-3 licence, https://energyplus.net.
 - **Brightway:** Mutel C. (2017). Brightway: an open source framework for life cycle assessment. *J. Open Source Softw.* 2(12):236. BSD licence.
 - **ecoinvent:** Wernet G. et al. (2016). The ecoinvent database version 3. *Int. J. LCA* 21:1218–1230. Licensed; not included.
@@ -275,6 +293,6 @@ The wall names (e.g. `"SBC block (solid)"`) are used as keys across the scripts.
 
 **Funding:** Secretaría de Educación, Ciencia, Tecnología e Innovación de la Ciudad de México (SECTEI), agreement SECTEI/105/2025.
 
-**How to cite:** please cite the article and this repository: García Kerdán I., Pérez Pastrana L.E., Gori V. (2026). *Integrated energy simulation and life cycle assessment of sustainable construction materials for urban housing: code and data* (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.24452515
+**How to cite:** please cite the article and this repository (DOI on the Zenodo badge / `CITATION.cff`).
 
 **Contact:** Iván García Kerdán, Tecnologico de Monterrey, School of Engineering and Sciences, Mexico City, Mexico.

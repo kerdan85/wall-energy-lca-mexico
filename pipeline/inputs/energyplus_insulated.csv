@@ -1,0 +1,22 @@
+city,material,case,U,heating_kwh_m2,cooling_kwh_m2
+Mexico City,Concrete + EPS (insulated),measured,0.84,5.15,1.26
+Mexico City,Concrete + EPS (insulated),tabulated,0.95,5.94,1.26
+Mexico City,Concrete + EPS (insulated),U+10,0.93,5.8,1.29
+Mexico City,Concrete + EPS (insulated),U-10,0.76,4.5,1.26
+Mexico City,Concrete + EPS (insulated),cp+30,0.84,4.81,0.97
+Mexico City,Concrete + EPS (insulated),cp-30,0.84,5.71,1.81
+Mexico City,Concrete + EPS (insulated),check_U+10_cp+20,0.93,5.51,1.06
+Merida,Concrete + EPS (insulated),measured,0.84,0.0,160.23
+Merida,Concrete + EPS (insulated),tabulated,0.95,0.0,165.49
+Merida,Concrete + EPS (insulated),U+10,0.93,0.0,164.27
+Merida,Concrete + EPS (insulated),U-10,0.76,0.0,156.2
+Merida,Concrete + EPS (insulated),cp+30,0.84,0.0,158.81
+Merida,Concrete + EPS (insulated),cp-30,0.84,0.0,162.45
+Merida,Concrete + EPS (insulated),check_U+10_cp+20,0.93,0.0,163.13
+Hermosillo,Concrete + EPS (insulated),measured,0.84,1.59,140.41
+Hermosillo,Concrete + EPS (insulated),tabulated,0.95,1.88,146.95
+Hermosillo,Concrete + EPS (insulated),U+10,0.93,1.84,145.79
+Hermosillo,Concrete + EPS (insulated),U-10,0.76,1.35,135.05
+Hermosillo,Concrete + EPS (insulated),cp+30,0.84,1.45,138.95
+Hermosillo,Concrete + EPS (insulated),cp-30,0.84,1.8,142.79
+Hermosillo,Concrete + EPS (insulated),check_U+10_cp+20,0.93,1.72,144.63

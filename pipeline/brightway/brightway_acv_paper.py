@@ -22,6 +22,9 @@ Run from a terminal in the 'brightway' conda environment (environment-brightway.
   python brightway_acv_paper.py --setup        # first time: creates the project, imports ecoinvent
   python brightway_acv_paper.py --search "concrete block"   # browse proxies
   python brightway_acv_paper.py                # the run (about 10 min with scikit-umfpack, hours without)
+  python brightway_acv_paper.py --only "EPS insulation system (25 mm)"   # one item; other rows kept
+  python brightway_acv_paper.py --project MY_PROJECT ...                 # use an existing project
+In Spyder: runfile("brightway_acv_paper.py", args='--only "EPS insulation system (25 mm)"')
 """
 import math, sys, csv
 from pathlib import Path
@@ -42,6 +45,8 @@ OUT = HERE.parent / "inputs"; OUT.mkdir(exist_ok=True)
 CONFIG = dict(PROJECT="sectei_walls_lca", FG_DB="fg_walls_energy_paper",
               EI_DB="ecoinvent-3.9.1-cutoff", BIOSPHERE="ecoinvent-3.9.1-biosphere",
               EI_VERSION="3.9.1", N_MONTECARLO=1000, SEED=42)   # 1,000 iterations, as in the paper
+if "--project" in sys.argv:   # use an existing Brightway project, e.g. --project SECTEI_ACV_5065c25
+    CONFIG["PROJECT"] = sys.argv[sys.argv.index("--project") + 1]
 
 # ---------------------------------------------------------------------------------------------
 # Walls: mass per m2 = density x thickness, exactly as in Table 3 of the manuscript.
@@ -54,6 +59,8 @@ WALLS = {
     "Tepetate ashlar":          dict(mass=300.0, kind="proxy"),
     "SBC block (solid)":        dict(mass=150.0, kind="sbc"),
     "SBC block (hollow)":       dict(mass=135.0, kind="sbc"),
+    # insulation layer of the insulated benchmark (added to the concrete wall by ../mk_robust.py)
+    "EPS insulation system (25 mm)": dict(mass=None, kind="eps"),
 }
 
 # Background proxies (ecoinvent 3.9.1 names; other versions may rename them: check with --search).
@@ -77,6 +84,18 @@ SHARED = dict(
 EARTH_MIX = dict(cement=0.08, earth=0.92, press_kwh_per_kg=0.01)
 #   Sargassum-based concrete: 35% sargassum (taken as dry mass), oven-dried; drying energy as electricity.
 SBC_MIX = dict(cement=0.15, sand=0.50, sargassum=0.35, drying_kwh_per_kg_sargassum=0.30)
+
+# External insulation system per m2 of wall: 25 mm EPS (15 kg/m3), adhesive + reinforced base coat
+# (cement mortar), glass-fibre mesh. Each entry lists alternative ecoinvent names, tried in order.
+EPS_SYSTEM = [
+    ("EPS board 25 mm", 0.375, [dict(name="polystyrene foam slab production", product="polystyrene foam slab"),
+                                dict(name="market for polystyrene foam slab", product="polystyrene foam slab")]),
+    ("adhesive and base coat (cement mortar)", 9.0, [dict(name="cement mortar production", product="cement mortar"),
+                                                     dict(name="market for cement mortar", product="cement mortar"),
+                                                     dict(name="base plaster production", product="base plaster")]),
+    ("glass-fibre mesh", 0.16, [dict(name="glass fibre production", product="glass fibre"),
+                                dict(name="market for glass fibre", product="glass fibre")]),
+]
 
 GSD = dict(mass=1.05, energy=1.15)   # geometric standard deviations of the foreground quantities
 
@@ -136,6 +155,15 @@ def find(spec):
     cands.sort(key=pref); return cands[0]
 
 
+def find_any(specs):
+    for sp in specs:
+        try:
+            return find(dict(sp, loc=sp.get("loc", "RoW")))
+        except ValueError:
+            continue
+    raise ValueError(f"None of these ecoinvent activities was found: {[sp['name'] for sp in specs]}. Use --search.")
+
+
 def logn(amount, gsd):
     return dict(amount=amount, uncertainty_type=2, loc=math.log(abs(amount)), scale=math.log(gsd)) if amount else dict(amount=0.0)
 
@@ -161,6 +189,9 @@ def build_foreground():
             add(cem, EARTH_MIX["cement"] * m, GSD["mass"], "cement (stabiliser)", "kg")
             add(sand, EARTH_MIX["earth"] * m, GSD["mass"], "earth (as sand quarrying)", "kg")
             add(elec, EARTH_MIX["press_kwh_per_kg"] * m, GSD["energy"], "pressing electricity", "kWh")
+        elif w["kind"] == "eps":
+            for what, amount, specs in EPS_SYSTEM:
+                add(find_any(specs), amount, GSD["mass"], what, "kg")
         elif w["kind"] == "sbc":
             sarg = SBC_MIX["sargassum"] * m
             add(cem, SBC_MIX["cement"] * m, GSD["mass"], "cement", "kg")
@@ -181,6 +212,8 @@ def run():
         print(f"   {k:15s} {m}   [{bd.methods[m].get('unit', '')}]")
     inv = build_foreground(); fg = bd.Database(CONFIG["FG_DB"])
     acts = {a["name"]: a for a in fg}
+    if ONLY:
+        acts = {k: v for k, v in acts.items() if k in ONLY}
     # deterministic, six categories
     det = {}
     print("Deterministic results ...", flush=True)
@@ -209,13 +242,22 @@ def run():
         mc[name] = v; print(f"   Monte-Carlo done: {name}")
     mc = pd.DataFrame(mc)
     # ---- the file the pipeline reads ----
+    cols = ["material", "gwp_mean", "gwp_cv_pct", "gwp", "water", "acidification", "eutrophication", "human_toxicity", "fossil"]
+    old = {}
+    if ONLY and (OUT / "lca_a1a3.csv").exists():   # keep the rows of the walls not re-run
+        with open(OUT / "lca_a1a3.csv", newline="", encoding="utf-8") as f:
+            old = {r["material"]: r for r in csv.DictReader(f)}
     with open(OUT / "lca_a1a3.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f); w.writerow(["material", "gwp_mean", "gwp_cv_pct", "gwp", "water", "acidification", "eutrophication", "human_toxicity", "fossil"])
+        w = csv.writer(f); w.writerow(cols)
         for name in WALLS:
-            s = mc[name]; d = det[name]
-            w.writerow([name, s.mean(), 100 * s.std() / s.mean(), d["gwp"], d["water"], d["acidification"], d["eutrophication"], d["human_toxicity"], d["fossil"]])
+            if name in acts:
+                s = mc[name]; d = det[name]
+                w.writerow([name, s.mean(), 100 * s.std() / s.mean(), d["gwp"], d["water"], d["acidification"], d["eutrophication"], d["human_toxicity"], d["fossil"]])
+            elif name in old:
+                w.writerow([old[name][c] for c in cols])
     summ = pd.DataFrame({"mean": mc.mean(), "median": mc.median(), "CV_pct": 100 * mc.std() / mc.mean(), "P5": mc.quantile(0.05), "P95": mc.quantile(0.95)})
-    with pd.ExcelWriter(OUT / "lca_brightway_full.xlsx", engine="openpyxl") as xw:
+    xlsx = OUT / ("lca_brightway_full.xlsx" if not ONLY else "lca_brightway_extra.xlsx")
+    with pd.ExcelWriter(xlsx, engine="openpyxl") as xw:
         pd.DataFrame(det).T.to_excel(xw, sheet_name="A1-A3 per m2 wall")
         summ.to_excel(xw, sheet_name="Monte-Carlo GWP summary")
         inv.to_excel(xw, sheet_name="Inventory per m2 wall", index=False)
@@ -223,14 +265,29 @@ def run():
         pd.DataFrame([dict(category=k, method=" | ".join(m), unit=bd.methods[m].get("unit", "")) for k, m in methods.items()]).to_excel(xw, sheet_name="Methods used", index=False)
         mc.to_excel(xw, sheet_name="Monte-Carlo samples", index=False)
     print(summ.round(2).to_string())
-    print("\nWritten:", OUT / "lca_a1a3.csv", "and", OUT / "lca_brightway_full.xlsx")
+    print("\nWritten:", OUT / "lca_a1a3.csv", "and", xlsx)
     print("Next: run ../run_all.py")
 
+
+def _arg_after(flag):
+    """Value after a flag, joining words (Spyder's runfile splits args on spaces and keeps quotes)."""
+    if flag not in sys.argv: return None
+    words = []
+    for w in sys.argv[sys.argv.index(flag) + 1:]:
+        if w.startswith("--"): break
+        words.append(w)
+    return " ".join(words).strip("\"' ")
+
+_only = _arg_after("--only")
+ONLY = [n for n in WALLS if any(n.lower().startswith(o.strip().lower()) for o in _only.split(";"))] if _only else None
+if _only and not ONLY:
+    raise SystemExit(f"--only '{_only}' matches no item. Items: {list(WALLS)}")
+if ONLY: print("Running only:", ONLY)
 
 if __name__ == "__main__":
     if "--setup" in sys.argv:
         setup()
     elif "--search" in sys.argv:
-        search(sys.argv[sys.argv.index("--search") + 1])
+        search(_arg_after("--search"))
     else:
         run()

@@ -14,14 +14,16 @@ import style_nat as S; S.apply()
 R=json.load(open(f"{OUT}/robust_results.json")); INK=S.INK; MUT=S.MUT
 CLIM=["CDMX","Warm-subhumid","Hot-arid"]
 MATS=["Tepetate ashlar","Adobe-type block","SBC block (solid)","SBC block (solid, city-cast)","SBC block (hollow)","Volcanic stone (recinto)"]
-NAME={"Tepetate ashlar":"Tepetate","Adobe-type block":"Earth block","SBC block (solid)":"SBC solid","SBC block (hollow)":"SBC hollow","Volcanic stone (recinto)":"Volcanic stone","SBC block (solid, city-cast)":"SBC solid, city-cast"}
+INS="Concrete + EPS (insulated)"
+if INS in R["BASE"]["CDMX"]: MATS=[INS]+MATS
+NAME={"Tepetate ashlar":"Tepetate","Adobe-type block":"Earth block","SBC block (solid)":"SBC solid","SBC block (hollow)":"SBC hollow","Volcanic stone (recinto)":"Volcanic stone","SBC block (solid, city-cast)":"SBC solid, city-cast","Concrete + EPS (insulated)":"Insulated concrete"}
 WW="#6f8f7f"; PA="#8fa3b5"; NO="#b98a5a"
 def verdict(b):
     if b["dCO2"]>0.5 and b["dC"]<0: return WW
     if b["dCO2"]>0.5: return PA
     return NO
 mn=lambda v,d=0:(f"{v:+.{d}f}" if abs(v)>=(0.5 if d==0 else 0.05) else "0").replace("-","−")
-fig,axes=plt.subplots(2,3,figsize=(7.4,4.5),sharey=True,sharex="row")
+fig,axes=plt.subplots(2,3,figsize=(7.4,4.9),sharey=True,sharex="row")
 y=np.arange(len(MATS))[::-1]
 for j,c in enumerate(CLIM):
     for i,(key,lo,hi,sc) in enumerate([("dCO2","p5","p95",1.0),("dC","c5","c95",1e-3/19.0)]):
@@ -38,8 +40,9 @@ for j,c in enumerate(CLIM):
         ax.set_yticks(y); ax.set_yticklabels([NAME[m] for m in MATS],fontsize=7.6); ax.tick_params(axis="y",length=0); ax.tick_params(axis="x",labelsize=6.8)
         for s in ("top","right","left"): ax.spines[s].set_visible(False)
         ax.grid(axis="x",zorder=0); ax.set_ylim(-0.6,len(MATS)-0.4)
-        if i==0: ax.set_title(S.CLIMLAB[c].split(" (")[0],fontsize=8.8,pad=6); ax.set_xlim(-60,56)
-        else: ax.set_xlim(-6.5,14.5)
+        if MATS[0]==INS: ax.axhline(len(MATS)-1.5,color=MUT,lw=0.6,ls=(0,(2,2)),zorder=2)
+        if i==0: ax.set_title(S.CLIMLAB[c].split(" (")[0],fontsize=8.8,pad=6); ax.set_xlim(-60,68)
+        else: ax.set_xlim(-10.5,14.5)
 axes[0,1].set_xlabel("Lifetime CO$_2$ offset relative to concrete (t CO$_2$-eq per dwelling)   positive = less carbon $\\rightarrow$",fontsize=7.6)
 axes[1,1].set_xlabel("Net present cost relative to concrete (10$^3$ USD per dwelling, 50 yr, 5% real)   $\\leftarrow$ negative = saves money",fontsize=7.6)
 

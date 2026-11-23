@@ -81,6 +81,25 @@ for c in CLIM:
 A1A3[CC]=A1A3[SOLID]; CV[CC]=CV[SOLID]; MASS[CC]=MASS[SOLID]; PRICE[CC]=PRICE[SOLID]
 ORIG_ALT=list(ALT); ALT=ALT+[CC]; MATS_X=MATS+[CC]
 
+# ---------------- insulated benchmark: concrete block + 25 mm EPS external insulation ----------------
+# Same block as the reference with an external insulation system (EPS 25 mm, adhesive, base coat, mesh).
+INS="Concrete + EPS (insulated)"; INS_COST=280.0      # MXN/m2 installed system (210-400 range, MC below)
+EPS_A13,EPS_CV,EPS_SOURCE=lca_inputs.lca_extra("EPS insulation system (25 mm)",6.0,30.0)
+EPS_MASS=0.025*15+9.0+0.16                             # kg/m2: EPS, mortar, mesh
+_INS=lca_inputs.insulated(INS)
+if _INS:
+    for c in CLIM:
+        P=_INS[c]; HC[c][INS]=P["measured"]; HCT[c][INS]=P["tabulated"]
+        up,um,kp,km=P["U+10"],P["U-10"],P["cp+30"],P["cp-30"]
+        DER[c][INS]=dict(hU=(up[0]-um[0])/0.2,cU=(up[1]-um[1])/0.2,hK=(kp[0]-km[0])/0.6,cK=(kp[1]-km[1])/0.6,up=up,um=um,kp=kp,km=km)
+        DIST[c][INS]=DIST[c][REF]
+    A1A3[INS]=A1A3[REF]+EPS_A13
+    CV[INS]=100*np.sqrt((CV[REF]/100*A1A3[REF])**2+(EPS_CV/100*EPS_A13)**2)/A1A3[INS]
+    MASS[INS]=MASS[REF]+EPS_MASS
+    PRICE[INS]=(PRICE[REF][0],PRICE[REF][1],PRICE[REF][2]+INS_COST)
+    ALT=ALT+[INS]; MATS_X=MATS_X+[INS]
+print("insulated benchmark:",bool(_INS)," EPS system A1-A3",EPS_A13,"kg/m2 (",EPS_SOURCE,")")
+
 # ---------------- biogenic carbon stored in the sargassum (reported separately) ----------------
 # EN 15804+A2 (-1/+1): uptake is credited in A1-A3 and released at end of life, so the base case
 # (A1-A4 + B6, no end of life) treats it as neutral. Reported here as a temporary-storage indicator.
@@ -121,6 +140,7 @@ for c in CLIM:
         SHARE[(c,m)]=op/(op+emb)
 
 # ---------------- scenarios ----------------
+HC2050=lca_inputs.climate2050()
 SCEN={c:{} for c in CLIM}
 for c in CLIM:
     for m in ALT:
@@ -135,6 +155,11 @@ for c in CLIM:
         s["tariff_low"]=evaluate(c,m,ce=1.2)
         s["r0"]=evaluate(c,m,r=0.0); s["r10"]=evaluate(c,m,r=0.10)
         s["no_freight_cost"]=evaluate(c,m,c_t=0.0)
+        if HC2050:
+            mm=SOLID if m==CC else m
+            s["climate_2050"]=evaluate(c,m,hc=HC2050[c][mm],hcref=HC2050[c][REF])   # whole life in the 2041-2060 climate
+            s["climate_mid"]=evaluate(c,m,hc=tuple((a+b)/2 for a,b in zip(HC[c][m],HC2050[c][mm])),
+                                      hcref=tuple((a+b)/2 for a,b in zip(HC[c][REF],HC2050[c][REF])))   # linear warming over the life
         SCEN[c][m]=s
 
 # equal thickness: tepetate at 0.12 m (k = 0.40) ; and U-only (reference areal heat capacity)
@@ -158,6 +183,9 @@ for c in CLIM:
 def q(m,p):   # lognormal quantile for A1-A3
     from statistics import NormalDist
     s=np.sqrt(np.log(1+(CV[m]/100)**2)); return float(np.exp(np.log(A1A3[m])-s*s/2+s*NormalDist().inv_cdf(p)))
+def qe(p):   # lognormal quantile of the EPS system production carbon
+    from statistics import NormalDist
+    se=np.sqrt(np.log(1+(EPS_CV/100)**2)); return float(np.exp(np.log(EPS_A13)-se*se/2+se*NormalDist().inv_cdf(p)))
 OAT={c:{} for c in CLIM}
 for c in CLIM:
     for m in ALT:
@@ -165,8 +193,12 @@ for c in CLIM:
         L.append(("Wall $U$ ±10%",evaluate(c,m,hc=d["um"])["dCO2"]-b,evaluate(c,m,hc=d["up"])["dCO2"]-b))
         L.append(("Reference $U$ ±10%",evaluate(c,m,hcref=dr["um"])["dCO2"]-b,evaluate(c,m,hcref=dr["up"])["dCO2"]-b))
         L.append(("Heat capacity ±30%",evaluate(c,m,hc=d["km"])["dCO2"]-b,evaluate(c,m,hc=d["kp"])["dCO2"]-b))
-        L.append(("Production carbon P5–P95",evaluate(c,m,a13=q(m,0.95))["dCO2"]-b,evaluate(c,m,a13=q(m,0.05))["dCO2"]-b))
-        L.append(("Reference production P5–P95",evaluate(c,m,a13ref=q(REF,0.05))["dCO2"]-b,evaluate(c,m,a13ref=q(REF,0.95))["dCO2"]-b))
+        if m==INS:   # the insulated wall contains the reference block: only the EPS system is its own production
+            L.append(("Production carbon P5–P95",evaluate(c,m,a13=A1A3[REF]+qe(0.95))["dCO2"]-b,evaluate(c,m,a13=A1A3[REF]+qe(0.05))["dCO2"]-b))
+            L.append(("Reference production P5–P95",0.0,0.0))
+        else:
+            L.append(("Production carbon P5–P95",evaluate(c,m,a13=q(m,0.95))["dCO2"]-b,evaluate(c,m,a13=q(m,0.05))["dCO2"]-b))
+            L.append(("Reference production P5–P95",evaluate(c,m,a13ref=q(REF,0.05))["dCO2"]-b,evaluate(c,m,a13ref=q(REF,0.95))["dCO2"]-b))
         L.append(("Freight factor 0.06–0.15",evaluate(c,m,e_t=0.15)["dCO2"]-b,evaluate(c,m,e_t=0.06)["dCO2"]-b))
         L.append(("Grid factor 0.25–0.42",evaluate(c,m,f=0.25)["dCO2"]-b,0.0))
         L.append(("Cooling COP 2.5–4",evaluate(c,m,cop_c=4.0)["dCO2"]-b,evaluate(c,m,cop_c=2.5)["dCO2"]-b))
@@ -186,8 +218,12 @@ for m in MATS:
 for dct in (uU,uK,g): dct[CC]=dct[SOLID]
 eT=rng.triangular(0.06,0.10,0.15,N); cT=rng.triangular(0.7,1.0,1.5,N); cop=rng.triangular(2.5,3.0,4.0,N)
 fg=rng.uniform(0.25,0.42,N); ce=rng.triangular(1.2,3.5,4.5,N); rr=rng.uniform(0.03,0.08,N)
-pf={m:rng.normal(1,0.10,N) for m in MATS}; pf[CC]=pf[SOLID]
+pf={m:rng.normal(1,0.10,N) for m in MATS}; pf[CC]=pf[SOLID]; pf[INS]=pf[REF]
 PV=(1-(1+rr)**(-T))/rr
+if INS in ALT:   # drawn last so that the samples of the other walls are unchanged
+    uU[INS]=rng.normal(1,0.05,N); uK[INS]=rng.uniform(0.7,1.3,N)
+    se=np.sqrt(np.log(1+(EPS_CV/100)**2)); g[INS]=g[REF]+np.exp(np.log(EPS_A13)-se*se/2+se*rng.standard_normal(N))
+    ins_cost=rng.uniform(210,400,N)
 def dem(c,m):
     d=DER[c][m]; h0,c0=HC[c][m]
     h=np.clip(h0+d["hU"]*(uU[m]-1)+d["hK"]*(uK[m]-1),0,None); cc=np.clip(c0+d["cU"]*(uU[m]-1)+d["cK"]*(uK[m]-1),0,None)
@@ -198,7 +234,7 @@ for c in CLIM:
         dE=eref-dem(c,m)
         tkm=MASS[m]/1000*DIST[c][m]; tkr=MASS[REF]/1000*DIST[c][REF]
         dco2=(dE*Af*T*fg+(g[REF]-g[m])*Aw+(tkr-tkm)*eT*Aw)/1000
-        blk=lambda mm: PRICE[mm][0]*PRICE[mm][1]*pf[mm]+PRICE[mm][2]
+        blk=lambda mm: PRICE[mm][0]*PRICE[mm][1]*pf[mm]+(PRICE[REF][2]+ins_cost if mm==INS else PRICE[mm][2])
         dC=(blk(m)-blk(REF))*Aw+(tkm-tkr)*cT*Aw-dE*Af*ce*PV
         MCR[c][m]=dict(p5=float(np.percentile(dco2,5)),p50=float(np.percentile(dco2,50)),p95=float(np.percentile(dco2,95)),
                        pco2=float(np.mean(dco2>0)),pcost=float(np.mean(dC<0)),pww=float(np.mean((dco2>0)&(dC<0))),
@@ -214,12 +250,18 @@ for c in CLIM:
 # demand uncertainty band from U (±10%) for figure
 BAND={c:{m:(sum(DER[c][m]["um"]),sum(DER[c][m]["up"])) for m in MATS_X} for c in CLIM}
 # MC table for A1-A3 consistent with the violin figure (seed 7, n=500, same order)
-MCF={m:(A1A3[m],CV[m]) for m in sorted(A1A3,key=lambda k:A1A3[k]) if m!=CC}
+MCF={m:(A1A3[m],CV[m]) for m in sorted(A1A3,key=lambda k:A1A3[k]) if m in MATS}
 r7=np.random.default_rng(7); TAB7={}
 for m,(mu,cv) in MCF.items():
     s=np.sqrt(np.log(1+(cv/100)**2)); x=r7.lognormal(np.log(mu)-s*s/2,s,500); TAB7[m]=[float(v) for v in np.percentile(x,[5,50,95])]
 
-json.dump(dict(LCA_SOURCE=LCA_SOURCE,ENERGY_SOURCE=ENERGY_SOURCE,DERIV_SOURCE=DERIV_SOURCE,LIN_ERR=max(chk),CV=CV,A1A3=A1A3,HC=HC,HCT=HCT,BASE=BASE,SCEN=SCEN,EQ=EQ,UONLY=UONLY,OAT=OAT,MC=MCR,BAND=BAND,TAB7=TAB7,
+# ---------------- free-running comfort (EN 16798-1 Cat. II) ----------------
+COMFORT=lca_inputs.comfort()
+# ---------------- programme scale: national social-housing programme 2025-2030 ----------------
+N_PROG=1.8e6                                           # new dwellings (Vivienda para el Bienestar)
+SCALE={c:{m:dict(dCO2_Mt=BASE[c][m]["dCO2"]*N_PROG/1e6,dC_bnUSD=BASE[c][m]["dC"]*N_PROG/FX/1e9) for m in ALT} for c in CLIM}
+
+json.dump(dict(COMFORT=COMFORT,SCALE=SCALE,N_PROG=N_PROG,INS=INS,EPS_A13=EPS_A13,EPS_CV=EPS_CV,EPS_SOURCE=EPS_SOURCE,INS_COST=INS_COST,HC2050=HC2050,LCA_SOURCE=LCA_SOURCE,ENERGY_SOURCE=ENERGY_SOURCE,DERIV_SOURCE=DERIV_SOURCE,LIN_ERR=max(chk),CV=CV,A1A3=A1A3,HC=HC,HCT=HCT,BASE=BASE,SCEN=SCEN,EQ=EQ,UONLY=UONLY,OAT=OAT,MC=MCR,BAND=BAND,TAB7=TAB7,
                SHARE={f"{c}|{m}":v for (c,m),v in SHARE.items()},MASS=MASS,DIST=DIST,BIO=BIO,BIO_DWELLING={m:[v*Aw/1000 for v in t] for m,t in BIO.items()},C_FRAC=C_FRAC,AW=Aw),
           open(f"{OUT}/robust_results.json","w"),indent=1,default=float)
 

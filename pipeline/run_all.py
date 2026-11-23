@@ -15,6 +15,7 @@ STEPS = [("sim_engine.py", "simplified hourly 5R1C model (fallback only, used if
          ("mk_robust.py", "offsets, costs, scenarios, sensitivity, Monte Carlo -> robust_results.json"),
          ("mk_figs_rev.py", "U values, demand, production carbon, transport, offsets, sensitivity"),
          ("mk_fig_quadrant.py", "carbon and cost bars"),
+         ("mk_fig_comfort.py", "free-running comfort"),
          ("mk_map.py", "map of sources, cities and climates"),
          ("mk_figs_v3.py", "case-study dwelling, system boundary, multi-criteria"),
          ("mk_materials_plate.py", "materials plate"),

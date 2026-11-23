@@ -22,3 +22,11 @@ if you reuse them, download them from the source and cite the authors as above.
 
 The Mexico City file is the one used by the original DesignBuilder model and in the companion
 measurement study.
+
+## Mid-century files (`2050/`)
+
+`run_extensions.py` derives one file per city for 2041–2060 by the shifting method of Belcher et al.
+(2005): the hourly dry-bulb temperature is raised by the CMIP6 SSP2-4.5 ensemble warming of the IPCC
+reference region (Almazroui et al. 2021, Table 2: North Central America 1.52 K for Mexico City and
+Hermosillo, South Central America 1.36 K for Mérida), the relative humidity is kept and the dew point
+recomputed. All other fields are those of the original TMYx files, whose credit applies.
